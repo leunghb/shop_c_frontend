@@ -4,9 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import 'lib-flexible/flexible'
+import './utils/httpApi'
+import qs from 'qs'
 
 import { Toast } from 'vant'
 Vue.use(Toast)
+Vue.prototype.$qs = qs
 
 Vue.config.productionTip = false
 
