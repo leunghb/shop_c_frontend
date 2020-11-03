@@ -1,0 +1,62 @@
+.login {
+    background-image: linear-gradient(#3391c9, #82d2e8);
+    .loginIcon {
+        position: absolute;
+        left: 50%;
+        margin-top: 30px;
+        margin-left: -20vw;
+        width: 40vw;
+    }
+    input {
+        position: relative;
+        margin-left: 15vw;
+        width: 70vw;
+        height: 40px;
+        border: initial;
+        border-bottom: 1px solid #fff;
+        box-sizing: border-box;
+        background-color: initial;
+        color: #fff;
+        font-size: 10px;
+    }
+    input::placeholder {
+        color: #fff;
+    }
+    .account {
+        margin-top: 240px;
+    }
+    .password {
+        margin-top: 10px;
+    }
+    .submit {
+        position: relative;
+        margin-top: 30px;
+        left: 15vw;
+        width: 70vw;
+        height: 40px;
+        border: 1px solid #fff;
+        box-sizing: border-box;
+        border-radius: 20px;
+        text-align: center;
+        font-size: 12px;
+        line-height: 40px;
+        color: #fff;
+    }
+    .canSubmit {
+        background-color: #fff;
+        color: #3391c9;
+    }
+
+    .forgetPwd,.register {
+        position: absolute;
+        bottom: 60px;
+        width: 100%;
+        font-size: 10px;
+        color: #fff;
+        text-align: center;
+    }
+
+    .register {
+        bottom: 20px;
+    }
+}

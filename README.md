@@ -1,3 +1,8 @@
+---
+tags: []
+created: 2020-11-03T01:06:56.838Z
+modified: 2020-11-03T02:09:47.248Z
+---
 # shop_c_frontend
 
 > A Vue.js project
