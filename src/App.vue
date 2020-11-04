@@ -18,7 +18,8 @@ export default {
     watch: {
         $route(newVal, oldVal) {
             let path = this.$route.path;
-            this.showNavBar = path != "/" && path != "/Login";
+            this.showNavBar =
+                path != "/" && path != "/Login" && path != "/Register";
         },
     },
 };

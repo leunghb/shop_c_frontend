@@ -9,16 +9,9 @@
             v-model="account"
             onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"
         />
-        <input
-            class="password"
-            type="text"
-            placeholder="密码"
-            v-model="password"
-        />
+        <input class="password" type="text" placeholder="密码" v-model="password" />
 
-        <div :class="['submit', canSubmit ? 'canSubmit' : '']" @click="login()">
-            登录
-        </div>
+        <div class="submit" @click="login()">登录</div>
 
         <div class="forgetPwd" @click="forgetPwd()">忘记密码?</div>
         <div class="register" @click="register()">注册</div>
@@ -34,7 +27,6 @@ export default {
         return {
             account: "",
             password: "",
-            canSubmit: false,
         };
     },
     methods: {
@@ -73,15 +65,11 @@ export default {
                     console.log(err);
                 });
         },
-    },
-    watch: {
-        account(newVal, oldVal) {
-            this.canSubmit =
-                this.account.length > 0 && this.password.length > 0;
-        },
-        password(newVal, oldVal) {
-            this.canSubmit =
-                this.account.length > 0 && this.password.length > 0;
+        forgetPwd() {},
+        register() {
+            this.$router.push({
+                path: "/Register",
+            });
         },
     },
 };

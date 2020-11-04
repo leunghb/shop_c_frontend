@@ -34,33 +34,15 @@ export default {
                 },
             ],
             currentNavIndex: 0,
-            time: 1,
         };
     },
-    created() {
-        let that = this;
-        let timer = setInterval(() => {
-            if (that.time > 0) {
-                --that.time;
-            } else {
-                clearTimeout(timer);
-                if (document.cookie.includes("SHOPSESSIONID")) {
-                    this.switchTab("/Home", 0);
-                    return false;
-                }
-                this.$router.push({
-                    path: "/Login",
-                });
-            }
-        }, 1000);
-    },
+    created() {},
     methods: {
         switchTab(path, index) {
-            this.currentNavIndex = index;
-            console.log("====");
             this.$router.push({
                 path: path,
             });
+            this.currentNavIndex = index;
         },
     },
 };
