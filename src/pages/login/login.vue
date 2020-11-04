@@ -9,9 +9,16 @@
             v-model="account"
             onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"
         />
-        <input class="password" type="text" placeholder="密码" v-model="password" />
+        <input
+            class="password"
+            type="text"
+            placeholder="密码"
+            v-model="password"
+        />
 
-        <div :class="['submit', canSubmit ? 'canSubmit' : '']" @click="login()">登录</div>
+        <div :class="['submit', canSubmit ? 'canSubmit' : '']" @click="login()">
+            登录
+        </div>
 
         <div class="forgetPwd" @click="forgetPwd()">忘记密码?</div>
         <div class="register" @click="register()">注册</div>
@@ -52,7 +59,15 @@ export default {
             });
             post(api.login, params)
                 .then((res) => {
-                    console.log(res);
+                    let data = res.data;
+                    if (data.code == 0) {
+                        document.cookie = "SHOPSESSIONID=" + data.data;
+                        this.$router.push({
+                            path: "/Home",
+                        });
+                        return false;
+                    }
+                    this.$toast(data.message);
                 })
                 .catch((err) => {
                     console.log(err);

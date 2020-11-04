@@ -1,0 +1,24 @@
+@font-face {font-family: "iconfont";
+  src: url('../iconfont/iconfont.ttf?t=1604480833659') format('truetype')
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.iconshangcheng:before {
+  content: "\e63b";
+}
+
+.icongouwucheshangcheng-xianxing:before {
+  content: "\e7a9";
+}
+
+.iconbiaoqianA01_wode-80:before {
+  content: "\eac7";
+}
+

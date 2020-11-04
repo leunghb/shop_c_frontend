@@ -1,0 +1,28 @@
+$navNum: 3;
+.navBar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 62px;
+    width: 100vw;
+    border-top: 1px solid #eee;
+    .item {
+        display: inline-block;
+        width: calc(100vw / #{$navNum});
+        text-align: center;
+        color: #7c7c7c;
+        .iconfont {
+            display: inline-block;
+            margin-top: 6px;
+            font-size: 30px;
+        }
+        .label {
+            margin-top: 3px;
+            font-size: 12px;
+            line-height: 12px;
+        }
+    }
+    .active {
+        color: #000;
+    }
+}
