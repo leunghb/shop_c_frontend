@@ -34,8 +34,7 @@ export default {
             password: "",
         };
     },
-    created() {
-    },
+    created() {},
     methods: {
         login() {
             const ACCOUNT = this.account,
@@ -69,13 +68,21 @@ export default {
                     this.$toast(data.message);
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.$toast(err);
                 });
         },
-        forgetPwd() {},
+        forgetPwd() {
+            this.router(1);
+        },
         register() {
+            this.router(0);
+        },
+        router(type) {
             this.$router.push({
-                path: "/Register",
+                path: "/RegisterOrForgetPwd",
+                query: {
+                    type: type,
+                },
             });
         },
     },

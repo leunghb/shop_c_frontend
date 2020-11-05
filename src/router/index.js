@@ -20,9 +20,9 @@ export default new Router({
             name: 'Login',
             component: () => import('@/pages/login/login')
         }, {
-            path: '/Register',
-            name: 'Register',
-            component: () => import('@/pages/register/register')
+            path: '/RegisterOrForgetPwd',
+            name: 'RegisterOrForgetPwd',
+            component: () => import('@/pages/registerOrForgetPwd/registerOrForgetPwd')
         }, {
             path: '/',
             name: 'Main',

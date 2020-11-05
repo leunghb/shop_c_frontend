@@ -28,11 +28,13 @@ if (ENV == "production") {
 }
 
 export const api = {
+    // 用户
     getAllUser: url + "/user/getAllUser", //获取所有用户
     getUserByAccount: url + "/user/getUserByAccount", //通过账号获取用户
     sendVerifyCode: url + "/user/sendVerifyCode", //发送验证码
     register: url + "/user/register", //注册
     login: url + "/user/login", //登录
+    forgetPwd: url + "/user/updatePwd",//修改密码
 }
 
 export function get(url, params) {
