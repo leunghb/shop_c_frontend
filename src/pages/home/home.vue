@@ -1,9 +1,11 @@
 <template>
-    <div class="index">index</div>
+    <div class="home">home</div>
 </template>
 
 <script>
-export default {};
+export default {
+    created() {},
+};
 </script>
 
 <style>

@@ -9,7 +9,12 @@
             v-model="account"
             onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"
         />
-        <input class="password" type="text" placeholder="密码" v-model="password" />
+        <input
+            class="password"
+            type="text"
+            placeholder="密码"
+            v-model="password"
+        />
 
         <div class="submit" @click="login()">登录</div>
 
@@ -19,7 +24,7 @@
 </template>
 
 <script>
-import { isEmail } from "../../utils/verify";
+import { isEmail } from "../../utils/common";
 import { api, post } from "../../utils/httpApi";
 
 export default {
@@ -28,6 +33,8 @@ export default {
             account: "",
             password: "",
         };
+    },
+    created() {
     },
     methods: {
         login() {
@@ -55,7 +62,7 @@ export default {
                     if (data.code == 0) {
                         document.cookie = "SHOPSESSIONID=" + data.data;
                         this.$router.push({
-                            path: "/Home",
+                            path: "/",
                         });
                         return false;
                     }

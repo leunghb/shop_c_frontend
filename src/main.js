@@ -6,9 +6,9 @@ import router from './router'
 import 'lib-flexible/flexible'
 import './utils/httpApi'
 import qs from 'qs'
+import { Toast, Icon } from 'vant'
 
-import { Toast } from 'vant'
-Vue.use(Toast)
+Vue.use(Toast).use(Icon)
 Vue.prototype.$qs = qs
 
 Vue.config.productionTip = false

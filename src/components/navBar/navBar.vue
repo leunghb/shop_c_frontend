@@ -1,10 +1,10 @@
 <template>
     <div class="navBar">
         <div
-            :class="['item', currentNavIndex == index ? 'active' : '']"
+            :class="['item', $route.path == item.path ? 'active' : '']"
             v-for="(item, index) in navs"
             :key="index"
-            @click="switchTab(item.path, index)"
+            @click="switchTab(item.path)"
         >
             <i :class="['iconfont', item.iconfont]"></i>
             <div class="label" v-text="item.label"></div>
@@ -19,30 +19,28 @@ export default {
             navs: [
                 {
                     label: "首页",
-                    path: "/home",
+                    path: "/",
                     iconfont: "iconshangcheng",
                 },
                 {
                     label: "购物车",
-                    path: "/cart",
+                    path: "/Cart",
                     iconfont: "icongouwucheshangcheng-xianxing",
                 },
                 {
                     label: "我的",
-                    path: "/my",
+                    path: "/My",
                     iconfont: "iconbiaoqianA01_wode-80",
                 },
             ],
-            currentNavIndex: 0,
         };
     },
     created() {},
     methods: {
-        switchTab(path, index) {
+        switchTab(path) {
             this.$router.push({
                 path: path,
             });
-            this.currentNavIndex = index;
         },
     },
 };
