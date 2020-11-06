@@ -6,9 +6,9 @@ import router from './router'
 import 'lib-flexible/flexible'
 import './utils/httpApi'
 import qs from 'qs'
-import { Toast, Icon } from 'vant'
+import { Toast, Icon, Swipe, SwipeItem, List, Cell, PullRefresh, Sticky } from 'vant'
 
-Vue.use(Toast).use(Icon)
+Vue.use(Toast).use(Icon).use(Swipe).use(SwipeItem).use(List).use(Cell).use(PullRefresh).use(Sticky)
 Vue.prototype.$qs = qs
 
 Vue.config.productionTip = false

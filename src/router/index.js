@@ -46,6 +46,10 @@ export default new Router({
             path: '/Error',
             name: 'Error',
             component: () => import('@/pages/error/error')
+        }, {
+            path: '/Search',
+            name: 'Search',
+            component: () => import('@/pages/search/search')
         }
     ]
 })

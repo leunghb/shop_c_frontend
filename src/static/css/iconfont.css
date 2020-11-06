@@ -10,15 +10,37 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.iconshangcheng:before {
-  content: "\e63b";
-}
-
-.icongouwucheshangcheng-xianxing:before {
-  content: "\e7a9";
-}
-
-.iconbiaoqianA01_wode-80:before {
-  content: "\eac7";
-}
+.iconfenlei:before {
+    content: "\e623";
+  }
+  
+  .iconshuiguo:before {
+    content: "\e60e";
+  }
+  
+  .iconlingshi_kaochang:before {
+    content: "\e610";
+  }
+  
+  .iconnoodle:before {
+    content: "\e72d";
+  }
+  
+  .iconxihuyongpin:before {
+    content: "\e6d3";
+  }
+  
+  .iconshangcheng:before {
+    content: "\e63b";
+  }
+  
+  .icongouwucheshangcheng-xianxing:before {
+    content: "\e7a9";
+  }
+  
+  .iconbiaoqianA01_wode-80:before {
+    content: "\eac7";
+  }
+  
+  
 

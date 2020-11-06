@@ -59,10 +59,14 @@ export default {
                 .then((res) => {
                     let data = res.data;
                     if (data.code == 0) {
-                        document.cookie = "SHOPSESSIONID=" + data.data;
-                        this.$router.push({
-                            path: "/",
-                        });
+                        this.$toast({ message: "正在登录...", duration: 1400 });
+                        let timer = setTimeout(() => {
+                            document.cookie = "SHOPSESSIONID=" + data.data;
+                            this.$router.push({
+                                path: "/",
+                            });
+                            clearTimeout(timer);
+                        }, 1500);
                         return false;
                     }
                     this.$toast(data.message);
