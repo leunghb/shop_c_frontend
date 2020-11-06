@@ -26,7 +26,6 @@ if (ENV == "development") {
 if (ENV == "production") {
     url = process.env.PROD_API_URL;
 }
-
 export const api = {
     // 用户
     getAllUser: url + "/user/getAllUser", //获取所有用户

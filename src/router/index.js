@@ -42,6 +42,10 @@ export default new Router({
                     component: () => import('@/pages/my/my')
                 }
             ]
+        }, {
+            path: '/Error',
+            name: 'Error',
+            component: () => import('@/pages/error/error')
         }
     ]
 })
