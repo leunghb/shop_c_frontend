@@ -5,6 +5,9 @@
 <script>
 export default {
     created() {},
+    methods: {
+        scrollTop() {},
+    },
 };
 </script>
 

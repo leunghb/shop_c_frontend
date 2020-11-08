@@ -4,8 +4,9 @@
 
 <script>
 export default {
-    created() {
-        console.log("cart");
+    created() {},
+    methods: {
+        scrollTop() {},
     },
 };
 </script>

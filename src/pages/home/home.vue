@@ -59,12 +59,25 @@
             @refresh="onRefresh"
         >
             <van-list
+                class="innerList"
                 v-model="loading"
                 :finished="finished"
                 finished-text="没有更多了"
                 @load="onLoad"
             >
-                <van-cell v-for="item in list" :key="item" :title="item" />
+                <van-cell class="item" v-for="item in list" :key="item">
+                    <img class="cover" src="" alt="" />
+                    <div class="info">
+                        <div class="title singleLineOmission">
+                            标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题
+                        </div>
+                        <div class="price">
+                            <div class="originalPrice">
+                                <span>￥</span><span>11.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </van-cell>
             </van-list>
         </van-pull-refresh>
     </div>
@@ -104,7 +117,9 @@ export default {
             headerBgWhite: false,
         };
     },
-    created() {},
+    created() {
+        document.documentElement.scrollTop = 300;
+    },
     methods: {
         toSearch() {
             this.$router.push({
@@ -122,7 +137,7 @@ export default {
                     this.refreshing = false;
                 }
 
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 11; i++) {
                     this.list.push(this.list.length + 1);
                 }
                 this.loading = false;
@@ -141,12 +156,15 @@ export default {
             this.onLoad();
         },
         scrollHandle(e) {
-            let top = e.srcElement.scrollingElement.scrollTop; // 获取页面滚动高度
+            let top = e.srcElement.scrollingElement.scrollTop;
             this.headerBgWhite = top >= 130;
+        },
+        scrollTop() {
+            document.documentElement.scrollTop = 0;
         },
     },
     mounted() {
-        window.addEventListener("scroll", this.scrollHandle); //绑定页面滚动事件
+        window.addEventListener("scroll", this.scrollHandle);
     },
 };
 </script>

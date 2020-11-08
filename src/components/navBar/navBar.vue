@@ -48,7 +48,9 @@ export default {
     created() {},
     methods: {
         switchTab(path, index) {
+            let routerHistory = this.$globalVariable.routerHistory;
             if (index == 0) {
+                this.$emit("homePageScrollTop", true);
             }
             this.$router.push({
                 path: path,

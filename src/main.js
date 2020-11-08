@@ -6,12 +6,18 @@ import router from './router'
 import 'lib-flexible/flexible'
 import './utils/httpApi'
 import qs from 'qs'
-import { Toast, Icon, Swipe, SwipeItem, List, Cell, PullRefresh, Sticky } from 'vant'
+import { Toast, Icon, Swipe, SwipeItem, List, Cell, PullRefresh, Sticky, Lazyload } from 'vant'
+import globalVariable from './utils/globalVariable'
 
-Vue.use(Toast).use(Icon).use(Swipe).use(SwipeItem).use(List).use(Cell).use(PullRefresh).use(Sticky)
+Vue.use(Toast).use(Icon).use(Swipe).use(SwipeItem).use(List).use(Cell).use(PullRefresh).use(Sticky).use(Lazyload)
 Vue.prototype.$qs = qs
+Vue.prototype.$globalVariable = globalVariable;
 
 Vue.config.productionTip = false
+
+router.beforeEach((to, from, next) => {
+    next();
+})
 
 /* eslint-disable no-new */
 new Vue({

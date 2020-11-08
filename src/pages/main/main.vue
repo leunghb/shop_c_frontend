@@ -1,9 +1,9 @@
 <template>
     <div class="main">
         <keep-alive>
-            <router-view></router-view>
+            <router-view ref="page"></router-view>
         </keep-alive>
-        <navBar></navBar>
+        <navBar @homePageScrollTop="homePageScrollTop"></navBar>
     </div>
 </template>
 
@@ -18,6 +18,11 @@ export default {
     created() {
         const isLogin = document.cookie.includes("SHOPSESSIONID");
         if (!isLogin) this.$router.push({ path: "/Login" });
+    },
+    methods: {
+        homePageScrollTop() {
+            this.$refs.page.scrollTop();
+        },
     },
 };
 </script>

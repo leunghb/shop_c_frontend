@@ -18,11 +18,17 @@ export default new Router({
         }, {
             path: '/Login',
             name: 'Login',
-            component: () => import('@/pages/login/login')
+            component: () => import('@/pages/login/login'),
+            meta: {
+                keepAlive: false,
+            }
         }, {
             path: '/RegisterOrForgetPwd',
             name: 'RegisterOrForgetPwd',
-            component: () => import('@/pages/registerOrForgetPwd/registerOrForgetPwd')
+            component: () => import('@/pages/registerOrForgetPwd/registerOrForgetPwd'),
+            meta: {
+                keepAlive: false,
+            }
         }, {
             path: '/',
             name: 'Main',
@@ -31,25 +37,40 @@ export default new Router({
                 {
                     path: '/',
                     name: 'Home',
-                    component: () => import('@/pages/home/home')
+                    component: () => import('@/pages/home/home'),
+                    meta: {
+                        keepAlive: true,
+                    }
                 }, {
                     path: '/Cart',
                     name: 'Cart',
-                    component: () => import('@/pages/cart/cart')
+                    component: () => import('@/pages/cart/cart'),
+                    meta: {
+                        keepAlive: true,
+                    }
                 }, {
                     path: '/My',
                     name: 'My',
-                    component: () => import('@/pages/my/my')
+                    component: () => import('@/pages/my/my'),
+                    meta: {
+                        keepAlive: true,
+                    }
                 }
             ]
         }, {
             path: '/Error',
             name: 'Error',
-            component: () => import('@/pages/error/error')
+            component: () => import('@/pages/error/error'),
+            meta: {
+                keepAlive: false,
+            }
         }, {
             path: '/Search',
             name: 'Search',
-            component: () => import('@/pages/search/search')
+            component: () => import('@/pages/search/search'),
+            meta: {
+                keepAlive: false,
+            }
         }
     ]
 })
