@@ -128,6 +128,23 @@
                     font-size: 12px;
                     line-height: 12px;
                 }
+                .price {
+                    position: absolute;
+                    bottom: 0;
+                    >div {
+                        display: inline-block;
+                    }
+                    .originalPrice {
+                        font-size: 16px;
+                        span:first-child {
+                            font-size: 12px;
+                        }
+                    }
+                    .discountPrice {
+                        margin-left: 5px;
+                        font-size: 12px;
+                    }
+                }
             }
         }
         .item:nth-child(2n+1) {

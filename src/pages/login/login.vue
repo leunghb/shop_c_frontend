@@ -62,6 +62,7 @@ export default {
                         this.$toast({ message: "正在登录...", duration: 1400 });
                         let timer = setTimeout(() => {
                             document.cookie = "SHOPSESSIONID=" + data.data;
+                            document.cookie = "account=" + ACCOUNT;
                             this.$router.push({
                                 path: "/",
                             });

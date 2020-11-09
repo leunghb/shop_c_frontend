@@ -75,6 +75,9 @@
                             <div class="originalPrice">
                                 <span>￥</span><span>11.00</span>
                             </div>
+                            <div class="discountPrice">
+                                <span>￥</span><span>9.00</span>
+                            </div>
                         </div>
                     </div>
                 </van-cell>
@@ -84,6 +87,9 @@
 </template>
 
 <script>
+import { api, get, post } from "../../utils/httpApi";
+import { getCookie } from "../../utils/common";
+
 export default {
     data() {
         return {
@@ -118,9 +124,20 @@ export default {
         };
     },
     created() {
-        document.documentElement.scrollTop = 300;
+        this.getGoods();
     },
     methods: {
+        getGoods() {
+            // let params = this.
+            post(api.getGoods)
+                .then((res) => {
+                    let data = res.data;
+                    console.log(data);
+                })
+                .catch((err) => {
+                    this.$toast(err);
+                });
+        },
         toSearch() {
             this.$router.push({
                 path: "/Search",
