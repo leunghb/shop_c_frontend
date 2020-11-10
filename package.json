@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "arr-sort": "^1.2.0",
     "lib-flexible": "^0.3.2",
     "node-sass": "^4.14.1",
     "px2rem-loader": "^0.1.9",

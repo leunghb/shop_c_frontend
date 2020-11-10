@@ -2,16 +2,12 @@
     <div class="home">
         <div :class="['header', headerBgWhite ? 'headerBgWhite' : '']">
             <div class="searchBtn" @click="toSearch()">
-                <van-icon class="icon" name="search" />
-                搜索
+                <van-icon class="icon" name="search" />搜索
             </div>
         </div>
 
         <div class="hotBgImg">
-            <img
-                src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg"
-                alt=""
-            />
+            <img src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg" alt />
         </div>
         <div class="hot">
             <van-swipe
@@ -21,21 +17,14 @@
                 @change="swipeChange()"
             >
                 <van-swipe-item>
-                    <img
-                        src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg"
-                        alt=""
-                    />
+                    <img src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg" alt />
                 </van-swipe-item>
-                <van-swipe-item
-                    ><img
-                        src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg"
-                        alt=""
-                /></van-swipe-item>
-                <van-swipe-item
-                    ><img
-                        src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg"
-                        alt=""
-                /></van-swipe-item>
+                <van-swipe-item>
+                    <img src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg" alt />
+                </van-swipe-item>
+                <van-swipe-item>
+                    <img src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg" alt />
+                </van-swipe-item>
             </van-swipe>
         </div>
 
@@ -47,17 +36,13 @@
                     :key="item.id"
                     @click="chooseClassify(item.id)"
                 >
-                    <img class="iconfont" :src="item.icon" alt="" />
+                    <img class="iconfont" :src="item.icon" alt />
                     <div class="label" v-text="item.label"></div>
                 </div>
             </div>
         </van-sticky>
 
-        <van-pull-refresh
-            class="list"
-            v-model="refreshing"
-            @refresh="onRefresh"
-        >
+        <van-pull-refresh class="list" v-model="refreshing" @refresh="onRefresh">
             <van-list
                 class="innerList"
                 v-model="loading"
@@ -66,12 +51,9 @@
                 @load="onLoad"
             >
                 <van-cell class="item" v-for="item in list" :key="item.id">
-                    <img class="cover" :src="item.cover" alt="" />
+                    <img class="cover" :src="item.cover" alt />
                     <div class="info">
-                        <div
-                            class="title singleLineOmission"
-                            v-text="item.mainTitle"
-                        ></div>
+                        <div class="title singleLineOmission" v-text="item.mainTitle"></div>
                         <div class="price">
                             <div
                                 :class="[
@@ -79,15 +61,12 @@
                                     item.discountPrice > 0 ? 'lineThrough' : '',
                                 ]"
                             >
-                                <span>￥</span
-                                ><span v-text="item.originalPrice"></span>
+                                <span>￥</span>
+                                <span v-text="item.originalPrice"></span>
                             </div>
-                            <div
-                                class="discountPrice"
-                                v-if="item.discountPrice > 0"
-                            >
-                                <span>￥</span
-                                ><span v-text="item.discountPrice"></span>
+                            <div class="discountPrice" v-if="item.discountPrice > 0">
+                                <span>￥</span>
+                                <span v-text="item.discountPrice"></span>
                             </div>
                         </div>
                     </div>
@@ -136,8 +115,22 @@ export default {
             headerBgWhite: false,
         };
     },
-    created() {},
+    created() {
+        this.getGoodsType();
+    },
     methods: {
+        //获取商品分类
+        getGoodsType() {
+            post(api.getGoodsType)
+                .then((res) => {
+                    let data = res.data;
+                    console.log(data);
+                })
+                .catch((err) => {
+                    this.$toast(err);
+                });
+        },
+        //获取商品列表
         getGoods() {
             let params = this.$qs.stringify({
                 limit: this.limit,
