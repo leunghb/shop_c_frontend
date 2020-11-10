@@ -65,18 +65,29 @@
                 finished-text="没有更多了"
                 @load="onLoad"
             >
-                <van-cell class="item" v-for="item in list" :key="item">
-                    <img class="cover" src="" alt="" />
+                <van-cell class="item" v-for="item in list" :key="item.id">
+                    <img class="cover" :src="item.cover" alt="" />
                     <div class="info">
-                        <div class="title singleLineOmission">
-                            标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题
-                        </div>
+                        <div
+                            class="title singleLineOmission"
+                            v-text="item.mainTitle"
+                        ></div>
                         <div class="price">
-                            <div class="originalPrice">
-                                <span>￥</span><span>11.00</span>
+                            <div
+                                :class="[
+                                    'originalPrice',
+                                    item.discountPrice > 0 ? 'lineThrough' : '',
+                                ]"
+                            >
+                                <span>￥</span
+                                ><span v-text="item.originalPrice"></span>
                             </div>
-                            <div class="discountPrice">
-                                <span>￥</span><span>9.00</span>
+                            <div
+                                class="discountPrice"
+                                v-if="item.discountPrice > 0"
+                            >
+                                <span>￥</span
+                                ><span v-text="item.discountPrice"></span>
                             </div>
                         </div>
                     </div>
@@ -117,22 +128,37 @@ export default {
                 },
             ],
             list: [],
+            page: 0,
+            limit: 10,
             loading: false,
             finished: false,
             refreshing: false,
             headerBgWhite: false,
         };
     },
-    created() {
-        this.getGoods();
-    },
+    created() {},
     methods: {
         getGoods() {
-            // let params = this.
-            post(api.getGoods)
+            let params = this.$qs.stringify({
+                limit: this.limit,
+                page: this.page,
+            });
+            post(api.getGoods, params)
                 .then((res) => {
                     let data = res.data;
-                    console.log(data);
+                    if (data.code == 0) {
+                        data.data.forEach((v) => {
+                            v.cover = api.baseUrl + v.cover.split(",")[0];
+                            this.list.push(v);
+                        });
+                        if (
+                            this.list.length < this.limit ||
+                            this.list.length % this.limit != 0
+                        ) {
+                            this.finished = true;
+                        }
+                        this.loading = false;
+                    }
                 })
                 .catch((err) => {
                     this.$toast(err);
@@ -148,28 +174,21 @@ export default {
         },
         chooseClassify(id) {},
         onLoad() {
+            console.log("===onLoad===");
+            ++this.page;
             setTimeout(() => {
                 if (this.refreshing) {
                     this.list = [];
                     this.refreshing = false;
                 }
-
-                for (let i = 0; i < 11; i++) {
-                    this.list.push(this.list.length + 1);
-                }
-                this.loading = false;
-
-                if (this.list.length >= 40) {
-                    this.finished = true;
-                }
+                this.getGoods();
             }, 1000);
         },
         onRefresh() {
-            // 清空列表数据
+            console.log("=====onRefresh====");
             this.finished = false;
-            // 重新加载数据
-            // 将 loading 设置为 true，表示处于加载状态
             this.loading = true;
+            this.page = 0;
             this.onLoad();
         },
         scrollHandle(e) {
