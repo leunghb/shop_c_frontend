@@ -7,23 +7,17 @@
         </div>
 
         <div class="hotBgImg">
-            <img src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg" alt />
+            <img :src="activeHotGoodsCover" alt />
         </div>
         <div class="hot">
             <van-swipe
                 class="swipe"
-                :autoplay="5000"
+                :autoplay="4500"
                 indicator-color="white"
-                @change="swipeChange()"
+                @change="swipeChange"
             >
-                <van-swipe-item>
-                    <img src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg" alt />
-                </van-swipe-item>
-                <van-swipe-item>
-                    <img src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg" alt />
-                </van-swipe-item>
-                <van-swipe-item>
-                    <img src="https://ylsqfile-dev.zhiyanglao.cn/be1b16e551b893ee3d38.jpg" alt />
+                <van-swipe-item v-for="item in hotList" :key="item.id">
+                    <img :src="item.cover" alt />
                 </van-swipe-item>
             </van-swipe>
         </div>
@@ -37,23 +31,33 @@
                     @click="chooseClassify(item.id)"
                 >
                     <img class="iconfont" :src="item.icon" alt />
-                    <div class="label" v-text="item.label"></div>
+                    <div class="label" v-text="item.title"></div>
                 </div>
             </div>
         </van-sticky>
 
-        <van-pull-refresh class="list" v-model="refreshing" @refresh="onRefresh">
+        <van-pull-refresh
+            v-if="classify.length > 0"
+            class="list"
+            v-model="refreshing"
+            @refresh="onRefresh"
+        >
             <van-list
                 class="innerList"
                 v-model="loading"
                 :finished="finished"
-                finished-text="没有更多了"
+                :finished-text="
+                    list.length > 0 ? finishedTextOver : finishedTextNull
+                "
                 @load="onLoad"
             >
                 <van-cell class="item" v-for="item in list" :key="item.id">
                     <img class="cover" :src="item.cover" alt />
                     <div class="info">
-                        <div class="title singleLineOmission" v-text="item.mainTitle"></div>
+                        <div
+                            class="title singleLineOmission"
+                            v-text="item.mainTitle"
+                        ></div>
                         <div class="price">
                             <div
                                 :class="[
@@ -64,7 +68,10 @@
                                 <span>￥</span>
                                 <span v-text="item.originalPrice"></span>
                             </div>
-                            <div class="discountPrice" v-if="item.discountPrice > 0">
+                            <div
+                                class="discountPrice"
+                                v-if="item.discountPrice > 0"
+                            >
                                 <span>￥</span>
                                 <span v-text="item.discountPrice"></span>
                             </div>
@@ -78,34 +85,15 @@
 
 <script>
 import { api, get, post } from "../../utils/httpApi";
-import { getCookie } from "../../utils/common";
+import { getCookie, getMutipSort, getSort } from "../../utils/common";
 
 export default {
     data() {
         return {
-            classify: [
-                {
-                    id: 340,
-                    icon: require("../../assets/classify-01.png"),
-                    label: "零食",
-                    color: "",
-                },
-                {
-                    id: 110,
-                    icon: require("../../assets/classify-02.png"),
-                    label: "水果",
-                },
-                {
-                    id: 3,
-                    icon: require("../../assets/classify-03.png"),
-                    label: "熟食",
-                },
-                {
-                    id: 354,
-                    icon: require("../../assets/classify-04.png"),
-                    label: "全部",
-                },
-            ],
+            //分类
+            classify: [],
+            currentClassifyId: null,
+            //列表
             list: [],
             page: 0,
             limit: 10,
@@ -113,18 +101,61 @@ export default {
             finished: false,
             refreshing: false,
             headerBgWhite: false,
+            finishedTextOver: "就这些货了 ┑(￣Д ￣)┍",
+            finishedTextNull: "没货了 ╮(๑•́ ₃•̀๑)╭",
+            //热门（销量前三）
+            hotList: [],
+            activeHotGoodsCover: "",
         };
     },
     created() {
+        this.getHotGoods();
         this.getGoodsType();
     },
     methods: {
+        // 获取销量前三商品
+        getHotGoods() {
+            get(api.getHotGoods)
+                .then((res) => {
+                    let data = res.data.data;
+                    data.forEach((v) => {
+                        v.cover = api.baseUrl + v.cover;
+                    });
+                    this.hotList = data;
+                })
+                .catch((err) => {
+                    this.$toast(err);
+                });
+        },
+        //每一页轮播结束后触发
+        swipeChange(index) {
+            this.activeHotGoodsCover = this.hotList[index].cover;
+        },
         //获取商品分类
         getGoodsType() {
             post(api.getGoodsType)
                 .then((res) => {
                     let data = res.data;
-                    console.log(data);
+                    let classify = data.data;
+                    classify.forEach((v) => {
+                        v.icon = api.baseUrl + v.icon;
+                    });
+                    let prioritySort = getSort((a, b) => {
+                        return a.priority > b.priority;
+                    });
+                    let createdAtSort = getSort((a, b) => {
+                        return a.createdAt > b.createdAt;
+                    });
+                    let arrSort = [prioritySort, createdAtSort];
+                    classify = classify.sort(getMutipSort(arrSort));
+                    classify = classify.slice(0, 3);
+                    classify.push({
+                        id: -1,
+                        icon: require("../../assets/classify-04.png"),
+                        title: "全部",
+                    });
+                    this.currentClassifyId = classify[0].id;
+                    this.classify = classify;
                 })
                 .catch((err) => {
                     this.$toast(err);
@@ -135,6 +166,8 @@ export default {
             let params = this.$qs.stringify({
                 limit: this.limit,
                 page: this.page,
+                goodsTypeId: this.currentClassifyId,
+                soldOut: 0,
             });
             post(api.getGoods, params)
                 .then((res) => {
@@ -157,17 +190,26 @@ export default {
                     this.$toast(err);
                 });
         },
+        //搜索
         toSearch() {
             this.$router.push({
                 path: "/Search",
             });
         },
-        swipeChange() {
-            //每一页轮播结束后触发
+        // 切换商品分类
+        chooseClassify(id) {
+            if (this.currentClassifyId == id) return false;
+            if (id == -1) {
+                this.$router.push({
+                    path: "/Classify",
+                });
+                return false;
+            }
+            this.currentClassifyId = id;
+            this.list = [];
+            this.onRefresh();
         },
-        chooseClassify(id) {},
         onLoad() {
-            console.log("===onLoad===");
             ++this.page;
             setTimeout(() => {
                 if (this.refreshing) {
@@ -178,7 +220,6 @@ export default {
             }, 1000);
         },
         onRefresh() {
-            console.log("=====onRefresh====");
             this.finished = false;
             this.loading = true;
             this.page = 0;

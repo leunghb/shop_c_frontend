@@ -61,7 +61,7 @@ export function conversion_time(time) {
         prefixInteger(time.getDate(), 2) +
         ' ' + prefixInteger(time.getHours(), 2) + ':' + prefixInteger(time.getMinutes(), 2);
 }
-//排序
+//单条件排序
 export function sortByKey(array, key, sortBy) {
     return array.sort(function (a, b) {
         var x = a[key];
@@ -72,4 +72,29 @@ export function sortByKey(array, key, sortBy) {
             return y - x;
         }
     })
+}
+//多条件排序
+export function getSort(fn) {
+    return function (a, b) {
+        var ret = 0;
+
+        if (fn.call(this, a, b)) {
+            ret = -1;
+        } else if (fn.call(this, b, a)) {
+            ret = 1;
+        }
+
+        return ret;
+    }
+}
+export function getMutipSort(arr) {
+    return function (a, b) {
+        var tmp, i = 0;
+
+        do {
+            tmp = arr[i++](a, b);
+        } while (tmp == 0 && i < arr.length);
+
+        return tmp;
+    }
 }

@@ -32,17 +32,18 @@ let user = "/user/", goods = "/goods/";
 export const api = {
     baseUrl: url,
     // 用户
-    getAllUser: url + user + "getAllUser", //获取所有用户
+    getAllUser: url + user + "getAllUser", //所有用户
     getUserByAccount: url + user + "getUserByAccount", //通过账号获取用户
     sendVerifyCode: url + user + "sendVerifyCode", //发送验证码
     register: url + user + "register", //注册
     login: url + user + "login", //登录
     forgetPwd: url + user + "updatePwd",//修改密码
-    getUserBalanceRecord: url + user + "getUserBalanceRecord", //获取用户余额使用记录
+    getUserBalanceRecord: url + user + "getUserBalanceRecord", //用户余额使用记录
 
     // 商品
     getGoodsType: url + goods + "getGoodsType", //商品分类
     getGoods: url + goods + "getGoods", //商品列表
+    getHotGoods: url + goods + "getHotGoods", //销量前三商品
 }
 
 export function get(url, params) {
