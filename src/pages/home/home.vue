@@ -31,7 +31,14 @@
                     @click="chooseClassify(item.id)"
                 >
                     <img class="icon" :src="item.icon" alt />
-                    <div class="label" v-text="item.title"></div>
+                    <div
+                        class="label"
+                        v-text="
+                            currentClassifyId == item.id
+                                ? '[ ' + item.title + ' ]'
+                                : item.title
+                        "
+                    ></div>
                 </div>
             </div>
         </van-sticky>
@@ -262,12 +269,12 @@ export default {
         },
         selectClassify(classifyId, index) {
             if (index >= 3 && this.activeClassifyId == classifyId) {
-                this.classify[3].title= "全部";
+                this.classify[3].title = "全部";
                 this.currentClassifyId = this.classify[0].id;
                 this.activeClassifyId = null;
                 this.list = [];
                 this.onRefresh();
-                this.showAllClassify =false;
+                this.showAllClassify = false;
                 this.activeClassifyId = this.classify[0].id;
                 return false;
             }

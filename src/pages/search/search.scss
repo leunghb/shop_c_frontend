@@ -1,0 +1,35 @@
+.search {
+    .header {
+        position: fixed;
+        top: 0;
+        height: 45px;
+        width: 100%;
+        line-height: 45px;
+        text-align: center;
+        background-color: #fff;
+        z-index: 999;
+        .backIcon {
+            position: absolute;
+            left: 10px;
+            height: 100%;
+            font-size: 22px;
+            line-height: 45px;
+            color: #000;
+        }
+        .search {
+            position: absolute;
+            left: 50px;
+            right: 0;
+            top: 50%;
+            transform: translate(0, -50%);
+            padding: initial;
+            .van-search__action {
+                padding-right: 15px;
+            }
+        }
+    }
+    .list {
+        position: relative;
+        margin-top: 45px;
+    }
+}
