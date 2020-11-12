@@ -7,17 +7,17 @@
         </div>
 
         <div class="hotBgImg">
-            <img :src="activeHotGoodsCover" alt />
+            <img :src="activeHotGoodsCover" v-lazy="activeHotGoodsCover" alt />
         </div>
         <div class="hot">
             <van-swipe
                 class="swipe"
-                :autoplay="4500"
+                :autoplay="5000"
                 indicator-color="white"
                 @change="swipeChange"
             >
                 <van-swipe-item v-for="item in hotList" :key="item.id">
-                    <img :src="item.cover" alt />
+                    <img :src="item.cover" v-lazy="item.cover" alt />
                 </van-swipe-item>
             </van-swipe>
         </div>
@@ -30,11 +30,34 @@
                     :key="item.id"
                     @click="chooseClassify(item.id)"
                 >
-                    <img class="iconfont" :src="item.icon" alt />
+                    <img class="icon" :src="item.icon" alt />
                     <div class="label" v-text="item.title"></div>
                 </div>
             </div>
         </van-sticky>
+        <van-overlay
+            class="allClassify"
+            :show="showAllClassify"
+            :z-index="10000"
+            @click="showAllClassify = false"
+        >
+            <div class="wrapper" @click.stop>
+                <div class="inner">
+                    <div
+                        :class="[
+                            'item',
+                            activeClassifyId == item.id ? 'active' : '',
+                        ]"
+                        v-for="(item, index) in allClassify"
+                        @click="selectClassify(item.id, index)"
+                        :key="item.id"
+                    >
+                        <img class="icon" :src="item.icon" alt="" />
+                        <div class="title" v-text="item.title"></div>
+                    </div>
+                </div>
+            </div>
+        </van-overlay>
 
         <van-pull-refresh
             v-if="classify.length > 0"
@@ -46,13 +69,19 @@
                 class="innerList"
                 v-model="loading"
                 :finished="finished"
+                error-text="请求失败，点击重新加载"
                 :finished-text="
                     list.length > 0 ? finishedTextOver : finishedTextNull
                 "
                 @load="onLoad"
             >
                 <van-cell class="item" v-for="item in list" :key="item.id">
-                    <img class="cover" :src="item.cover" alt />
+                    <img
+                        class="cover"
+                        :src="item.cover"
+                        v-lazy="item.cover"
+                        alt
+                    />
                     <div class="info">
                         <div
                             class="title singleLineOmission"
@@ -93,6 +122,8 @@ export default {
             //分类
             classify: [],
             currentClassifyId: null,
+            allClassify: [],
+            activeClassifyId: null,
             //列表
             list: [],
             page: 0,
@@ -106,6 +137,8 @@ export default {
             //热门（销量前三）
             hotList: [],
             activeHotGoodsCover: "",
+            //所有分类
+            showAllClassify: false,
         };
     },
     created() {
@@ -122,6 +155,7 @@ export default {
                         v.cover = api.baseUrl + v.cover;
                     });
                     this.hotList = data;
+                    this.activeHotGoodsCover = this.hotList[0].cover;
                 })
                 .catch((err) => {
                     this.$toast(err);
@@ -148,6 +182,7 @@ export default {
                     });
                     let arrSort = [prioritySort, createdAtSort];
                     classify = classify.sort(getMutipSort(arrSort));
+                    this.allClassify = classify;
                     classify = classify.slice(0, 3);
                     classify.push({
                         id: -1,
@@ -155,6 +190,7 @@ export default {
                         title: "全部",
                     });
                     this.currentClassifyId = classify[0].id;
+                    this.activeClassifyId = this.currentClassifyId;
                     this.classify = classify;
                 })
                 .catch((err) => {
@@ -200,12 +236,11 @@ export default {
         chooseClassify(id) {
             if (this.currentClassifyId == id) return false;
             if (id == -1) {
-                this.$router.push({
-                    path: "/Classify",
-                });
+                this.showAllClassify = true;
                 return false;
             }
             this.currentClassifyId = id;
+            this.activeClassifyId = id;
             this.list = [];
             this.onRefresh();
         },
@@ -224,6 +259,33 @@ export default {
             this.loading = true;
             this.page = 0;
             this.onLoad();
+        },
+        selectClassify(classifyId, index) {
+            if (index >= 3 && this.activeClassifyId == classifyId) {
+                this.classify[3].title= "全部";
+                this.currentClassifyId = this.classify[0].id;
+                this.activeClassifyId = null;
+                this.list = [];
+                this.onRefresh();
+                this.showAllClassify =false;
+                this.activeClassifyId = this.classify[0].id;
+                return false;
+            }
+            this.classify[3].title = "全部";
+            this.activeClassifyId = classifyId;
+            this.showAllClassify = false;
+            if (index < 3 && this.currentClassifyId != this.activeClassifyId) {
+                this.currentClassifyId = this.activeClassifyId;
+                this.list = [];
+                this.onRefresh();
+                return false;
+            }
+            let title = this.classify[3].title;
+            this.classify[3].title =
+                title + "/" + this.allClassify[index].title;
+            this.currentClassifyId = this.activeClassifyId;
+            this.list = [];
+            this.onRefresh();
         },
         scrollHandle(e) {
             let top = e.srcElement.scrollingElement.scrollTop;

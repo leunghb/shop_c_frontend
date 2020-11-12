@@ -7,6 +7,7 @@
 
 <script>
 export default {
+    name: "back",
     data() {
         return {};
     },
@@ -22,6 +23,7 @@ export default {
 <style lang="scss" scoped>
 .back {
     position: fixed;
+    top: 0;
     width: 100%;
     height: 45px;
     line-height: 45px;

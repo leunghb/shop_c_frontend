@@ -71,13 +71,6 @@ export default new Router({
             meta: {
                 keepAlive: false,
             }
-        }, {
-            path: '/Classify',
-            name: 'Classify',
-            component: () => import('@/pages/classify/classify'),
-            meta: {
-                keepAlive: false,
-            }
         }
     ]
 })

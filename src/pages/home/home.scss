@@ -75,7 +75,7 @@
             position: relative;
             width: 25%;
             height: 100%;
-            .iconfont {
+            .icon {
                 position: absolute;
                 left: 50%;
                 margin-top: 20px;
@@ -87,8 +87,57 @@
                 position: absolute;
                 left: 50%;
                 bottom: 23px;
+                width: 100%;
+                text-align: center;
                 transform: translate(-50%, 0);
                 font-size: 12px;
+            }
+        }
+    }
+    .allClassify {
+        .inner {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            padding: .5vw 0 2.5vw 0;
+            width: 70vw;
+            height: 70vw;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow-y: auto;
+            box-sizing: border-box;
+            .item {
+                display: inline-block;
+                position: relative;
+                margin-left: 2.5vw;
+                margin-top: 2.5vw;
+                width: 20vw;
+                height: 20vw;
+                .icon {
+                    position: absolute;
+                    left: 50%;
+                    top: 40%;
+                    transform: translate(-50%, -50%);
+                    width: 40px;
+                }
+                .title {
+                    position: absolute;
+                    bottom: 5px;
+                    width: 100%;
+                    text-align: center;
+                    font-size: 12px;
+                    line-height: 12px;
+                }
+            }
+            .active {
+                padding: 10px 0;
+                border: 1px solid #82d2e8;
+                box-sizing: border-box;
+                border-radius: 10px;
+                .icon {
+                    width: 50px;
+                }
             }
         }
     }
