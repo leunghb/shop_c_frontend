@@ -31,5 +31,42 @@
     .list {
         position: relative;
         margin-top: 45px;
+        .item {
+            position: relative;
+            .cover {
+                width: 100px;
+                height: 100px;
+                background-color: #eee;
+                vertical-align: bottom;
+                border-radius: 10px;
+            }
+            .mainTitle {
+                position: absolute;
+                top: -2px;
+                margin-left: 110px;
+                font-size: 14px;
+                line-height: 20px;
+            }
+            .price {
+                position: absolute;
+                bottom: 0;
+                margin-left: 110px;
+                line-height: 16px;
+                >div {
+                    display: inline-block;
+                }
+                .originalPrice {
+                    font-size: 16px;
+                }
+                .discountPrice {
+                    margin-left: 5px;
+                    font-size: 12px;
+                    line-height: 12px;
+                }
+                .lineThrough {
+                    text-decoration: line-through;
+                }
+            }
+        }
     }
 }
