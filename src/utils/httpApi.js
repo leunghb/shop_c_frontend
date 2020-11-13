@@ -43,7 +43,7 @@ export const api = {
     // 商品
     getGoodsType: url + goods + "getGoodsType", //商品分类
     getGoods: url + goods + "getGoods", //商品列表
-    getHotGoods: url + goods + "getHotGoods", //销量前三商品
+    getHotGoods: url + goods + "getHotGoods", //销量前几商品
 }
 
 export function get(url, params) {

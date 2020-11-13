@@ -73,6 +73,7 @@ export default {
                     this.$toast(data.message);
                 })
                 .catch((err) => {
+                    alert(err)
                     this.$toast(err);
                 });
         },

@@ -6,7 +6,7 @@
                 class="search"
                 v-model="searchValue"
                 show-action
-                placeholder="请输入搜索商品名称"
+                placeholder="请输入商品名称"
                 @search="search"
                 @clear="clear"
                 onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"

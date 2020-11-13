@@ -16,7 +16,11 @@
                 indicator-color="white"
                 @change="swipeChange"
             >
-                <van-swipe-item v-for="item in hotList" :key="item.id">
+                <van-swipe-item
+                    v-for="item in hotList"
+                    :key="item.id"
+                    @click="toGoodsDetail(item.goodsId)"
+                >
                     <img :src="item.cover" v-lazy="item.cover" alt />
                 </van-swipe-item>
             </van-swipe>
@@ -82,7 +86,12 @@
                 "
                 @load="onLoad"
             >
-                <van-cell class="item" v-for="item in list" :key="item.id">
+                <van-cell
+                    class="item"
+                    v-for="item in list"
+                    :key="item.id"
+                    @click="toGoodsDetail(item.goodsId)"
+                >
                     <img
                         class="cover"
                         :src="item.cover"
@@ -267,6 +276,7 @@ export default {
             this.page = 0;
             this.onLoad();
         },
+        //全部里面选择商品分类
         selectClassify(classifyId, index) {
             if (index >= 3 && this.activeClassifyId == classifyId) {
                 this.classify[3].title = "全部";
@@ -293,6 +303,15 @@ export default {
             this.currentClassifyId = this.activeClassifyId;
             this.list = [];
             this.onRefresh();
+        },
+        //商品详情
+        toGoodsDetail(goodsId) {
+            this.$router.push({
+                path: "GoodsDetail",
+                query: {
+                    goodsId: goodsId,
+                },
+            });
         },
         scrollHandle(e) {
             let top = e.srcElement.scrollingElement.scrollTop;
