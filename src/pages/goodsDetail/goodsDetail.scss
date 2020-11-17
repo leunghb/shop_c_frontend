@@ -31,6 +31,14 @@
             color: #fff;
             border-radius: 12px;
         }
+        .van-swipe__track {
+            .van-swipe-item {
+                height: 100%;
+                background-position: center !important;
+                background-size: cover !important;
+                background-repeat: no-repeat !important;
+            }
+        }
     }
 
     .goodsInfo {

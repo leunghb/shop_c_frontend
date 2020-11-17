@@ -221,7 +221,7 @@ export default {
                 goodsTypeId: this.currentClassifyId,
                 soldOut: 0,
             });
-            post(api.getGoods, params)
+            post(api.getGoodsList, params)
                 .then((res) => {
                     let data = res.data;
                     if (data.code == 0) {

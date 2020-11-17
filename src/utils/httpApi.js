@@ -42,8 +42,9 @@ export const api = {
 
     // 商品
     getGoodsType: url + goods + "getGoodsType", //商品分类
-    getGoods: url + goods + "getGoods", //商品列表
+    getGoodsList: url + goods + "getGoodsList", //商品列表
     getHotGoods: url + goods + "getHotGoods", //销量前几商品
+    getGoodsDetail: url + goods + "getGoodsDetail", //商品详情
 }
 
 export function get(url, params) {
