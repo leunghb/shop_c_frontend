@@ -174,7 +174,7 @@ export default {
                     this.activeHotGoodsCover = this.hotList[0].cover;
                 })
                 .catch((err) => {
-                    this.$toast(err);
+                    this.$toast(err.message);
                 });
         },
         //每一页轮播结束后触发
@@ -210,7 +210,7 @@ export default {
                     this.classify = classify;
                 })
                 .catch((err) => {
-                    this.$toast(err);
+                    this.$toast(err.message);
                 });
         },
         //获取商品列表
@@ -239,7 +239,7 @@ export default {
                     }
                 })
                 .catch((err) => {
-                    this.$toast(err);
+                    this.$toast(err.message);
                 });
         },
         //搜索

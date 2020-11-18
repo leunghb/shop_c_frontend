@@ -6,10 +6,10 @@ import router from './router'
 import 'lib-flexible/flexible'
 import './utils/httpApi'
 import qs from 'qs'
-import { Toast, Icon, Swipe, SwipeItem, List, Cell, PullRefresh, Sticky, Lazyload, Sidebar, SidebarItem, Overlay, Search, Sku } from 'vant'
+import { Toast, Icon, Swipe, SwipeItem, List, Cell, PullRefresh, Sticky, Lazyload, Sidebar, SidebarItem, Overlay, Search, Sku, Popup } from 'vant'
 import globalVariable from './utils/globalVariable'
 
-Vue.use(Toast).use(Icon).use(Swipe).use(SwipeItem).use(List).use(Cell).use(PullRefresh).use(Sticky).use(Lazyload).use(Sidebar).use(SidebarItem).use(Overlay).use(Search).use(Sku)
+Vue.use(Toast).use(Icon).use(Swipe).use(SwipeItem).use(List).use(Cell).use(PullRefresh).use(Sticky).use(Lazyload).use(Sidebar).use(SidebarItem).use(Overlay).use(Search).use(Sku).use(Popup)
 Vue.prototype.$qs = qs
 Vue.prototype.$globalVariable = globalVariable;
 

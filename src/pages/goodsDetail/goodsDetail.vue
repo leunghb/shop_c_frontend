@@ -58,29 +58,45 @@
             <van-icon name="arrow" />
             <div class="value"></div>
         </div>
-        <div class="detail">
-            详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情详情
-        </div>
-        <div class="footer">
-            <div class="buy" @click="showSku = true">购买</div>
-            <div class="cart" @click="showSku = true">加入购物车</div>
-        </div>
+        <div class="detail"></div>
 
-        <van-sku
+        <!-- <van-sku
             v-model="showSku"
             :sku="sku"
             :goods="goods"
             :goods-id="goodsId"
-            :message-config="messageConfig"
+            @buy-clicked="onBuyClicked"
+            @add-cart="onAddCartClicked"
+        /> -->
+        <van-sku
+            v-model="showSku"
+            :sku="skuData.sku"
+            :goods="skuData.goods"
+            :goods-id="skuData.goods_id"
+            :hide-stock="skuData.sku.hide_stock"
+            :quota="skuData.quota"
+            :quota-used="skuData.quota_used"
+            :initial-sku="initialSku"
+            reset-stepper-on-hide
+            reset-selected-sku-on-hide
+            disable-stepper-input
+            :close-on-click-overlay="closeOnClickOverlay"
+            :custom-sku-validator="customSkuValidator"
             @buy-clicked="onBuyClicked"
             @add-cart="onAddCartClicked"
         />
+
+        <div class="footer">
+            <div class="buy" @click="showSku = true">购买</div>
+            <div class="cart" @click="showSku = true">加入购物车</div>
+        </div>
     </div>
 </template>
 
 <script>
 import Back from "../../components/backToPrevious/backToPrevious";
 import { post, api } from "../../utils/httpApi";
+// import skuData from "../../utils/data"
 
 export default {
     data() {
@@ -95,10 +111,23 @@ export default {
             discountPrice: 0,
             salesVolume: 0,
 
+            // showSku: false,
+            // sku: {},
+            // goods: {},
+            // messageConfig: {},
+            skuData: {},
             showSku: false,
-            sku: {},
-            goods: {},
-            messageConfig: {},
+            showCustom: false,
+            showStepper: false,
+            showSoldout: false,
+            closeOnClickOverlay: true,
+            initialSku: {
+                // //默认选中
+                // s1: "30349",
+                // s2: "1193",
+                // selectedNum: 3,
+            },
+            customSkuValidator: () => "请选择xxx!",
         };
     },
     components: {
@@ -124,33 +153,69 @@ export default {
                         this.$toast(data.message);
                         return false;
                     }
-                    data = data.data;
-                    // console.log(data);
-                    data.cover.split(",").forEach((v) => {
+                    let goodsInfo = data.data.goodsInfo,
+                        goodsSpecs = data.data.goodsSpecs;
+                    goodsInfo.cover.split(",").forEach((v) => {
                         v = api.baseUrl + v;
                         this.cover.push(v);
                     });
-                    this.mainTitle = data.mainTitle;
-                    this.subTitle = data.subTitle;
-                    this.originalPrice = data.originalPrice;
-                    this.discountPrice = data.discountPrice;
-                    this.salesVolume = data.salesVolume;
-                    let sku = JSON.parse(data.sku);
-                    console.log(sku);
-                    let tree = [],
-                        treeIndex = 0;
+                    this.mainTitle = goodsInfo.mainTitle;
+                    this.subTitle = goodsInfo.subTitle;
+                    this.originalPrice = goodsInfo.originalPrice;
+                    this.discountPrice = goodsInfo.discountPrice;
+                    this.salesVolume = goodsInfo.salesVolume;
+                    let sku = JSON.parse(goodsInfo.sku);
+                    // tree
+                    let tree = [];
                     for (let i in sku) {
-                        console.log(i);
-                        console.log(sku[i]);
-                        let treeObj = {};
-                        treeObj.k = i;
-                        treeObj.k_s = treeIndex++;
-                        tree.push(treeObj);
+                        let indexOf = i.indexOf("-");
+                        let obj = {};
+                        obj.k = i.substring(0, indexOf);
+                        obj.k_s = "s" + i.substring(indexOf + 1);
+                        let treeV = [];
+                        sku[i].forEach((v) => {
+                            let skuIndexOf = v.indexOf("-");
+                            let skuObj = {};
+                            skuObj.id = v.substring(skuIndexOf + 1);
+                            skuObj.name = v.substring(0, skuIndexOf);
+                            treeV.push(skuObj);
+                        });
+                        obj.v = treeV;
+                        tree.push(obj);
                     }
-                    console.log(tree);
+                    this.skuData.sku.tree = tree;
+                    // list
+                    let list = [];
+                    goodsSpecs.forEach((v) => {
+                        let obj = {};
+                        obj.id = v.id;
+                        obj.price = v.price;
+                        obj.stock_num = v.stock;
+                        let specs = JSON.parse(v.specs);
+                        for (let i in specs) {
+                            let indexOf = i.indexOf("-");
+                            obj["s" + i.substring(indexOf + 1)] = specs[
+                                i
+                            ].substring(0, indexOf);
+                        }
+                        list.push(obj);
+                    });
+                    this.skuData.sku.list = list;
+                    this.skuData.sku.price =
+                        this.discountPrice > 0
+                            ? this.discountPrice
+                            : this.originalPrice;
+                    this.skuData.sku.stock_num = goodsInfo.stock;
+                    this.skuData.sku.none_sku = false;
+                    this.skuData.sku.hide_stock = false;
+                    this.skuData.goods = {
+                        title: this.mainTitle,
+                        picture: this.cover[0],
+                    };
+                    console.log(this.skuData);
                 })
                 .catch((err) => {
-                    this.$toast(err);
+                    this.$toast(err.message);
                 });
         },
         onBuyClicked() {},
