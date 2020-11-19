@@ -60,31 +60,39 @@
         </div>
         <div class="detail"></div>
 
-        <!-- <van-sku
-            v-model="showSku"
-            :sku="sku"
-            :goods="goods"
-            :goods-id="goodsId"
-            @buy-clicked="onBuyClicked"
-            @add-cart="onAddCartClicked"
-        /> -->
-        <van-sku
-            v-model="showSku"
-            :sku="skuData.sku"
-            :goods="skuData.goods"
-            :goods-id="skuData.goods_id"
-            :hide-stock="skuData.sku.hide_stock"
-            :quota="skuData.quota"
-            :quota-used="skuData.quota_used"
-            :initial-sku="initialSku"
-            reset-stepper-on-hide
-            reset-selected-sku-on-hide
-            disable-stepper-input
-            :close-on-click-overlay="closeOnClickOverlay"
-            :custom-sku-validator="customSkuValidator"
-            @buy-clicked="onBuyClicked"
-            @add-cart="onAddCartClicked"
-        />
+        <van-overlay class="sku" :show="showSku" @click="showSku = false">
+            <div class="wrapper" @click.stop>
+                <img class="cover" src="" alt="" />
+                <div class="price"><span>￥</span><span>11.00</span></div>
+                <div class="stock">剩余111件</div>
+                <div class="selected">已选</div>
+                <div class="clearBoth"></div>
+                <div
+                    class="attr"
+                    v-for="attrKeyItem in sku"
+                    :key="attrKeyItem.id"
+                    :attrKeyId="attrKeyItem.id"
+                >
+                    <div
+                        class="attrKey"
+                        v-text="attrKeyItem.name+attrKeyItem.id"
+                    ></div>
+                    <span
+                        class="attrValue"
+                        v-for="attrValueItem in attrKeyItem.attrValue"
+                        :key="attrValueItem.id"
+                        :attrValueId="attrValueItem.id"
+                    >
+                        <img
+                            v-if="attrValueItem.cover"
+                            :src="attrValueItem.cover"
+                            alt=""
+                        />
+                        <span class="name" v-text="attrValueItem.name+attrValueItem.id"></span>
+                    </span>
+                </div>
+            </div>
+        </van-overlay>
 
         <div class="footer">
             <div class="buy" @click="showSku = true">购买</div>
@@ -96,7 +104,6 @@
 <script>
 import Back from "../../components/backToPrevious/backToPrevious";
 import { post, api } from "../../utils/httpApi";
-// import skuData from "../../utils/data"
 
 export default {
     data() {
@@ -111,23 +118,8 @@ export default {
             discountPrice: 0,
             salesVolume: 0,
 
-            // showSku: false,
-            // sku: {},
-            // goods: {},
-            // messageConfig: {},
-            skuData: {},
-            showSku: false,
-            showCustom: false,
-            showStepper: false,
-            showSoldout: false,
-            closeOnClickOverlay: true,
-            initialSku: {
-                // //默认选中
-                // s1: "30349",
-                // s2: "1193",
-                // selectedNum: 3,
-            },
-            customSkuValidator: () => "请选择xxx!",
+            showSku: true,
+            sku: [],
         };
     },
     components: {
@@ -165,54 +157,39 @@ export default {
                     this.discountPrice = goodsInfo.discountPrice;
                     this.salesVolume = goodsInfo.salesVolume;
                     let sku = JSON.parse(goodsInfo.sku);
-                    // tree
-                    let tree = [];
                     for (let i in sku) {
-                        let indexOf = i.indexOf("-");
-                        let obj = {};
-                        obj.k = i.substring(0, indexOf);
-                        obj.k_s = "s" + i.substring(indexOf + 1);
-                        let treeV = [];
+                        let attrKeyIndexOf = i.indexOf(",");
+                        let attrKeyObj = {};
+                        attrKeyObj.name = i.substring(0, attrKeyIndexOf);
+                        attrKeyObj.id = i.substring(attrKeyIndexOf + 1);
+                        attrKeyObj.attrValue = [];
                         sku[i].forEach((v) => {
-                            let skuIndexOf = v.indexOf("-");
-                            let skuObj = {};
-                            skuObj.id = v.substring(skuIndexOf + 1);
-                            skuObj.name = v.substring(0, skuIndexOf);
-                            treeV.push(skuObj);
+                            let attrValueIndexOf = v.indexOf(",");
+                            let attrValueLastIndexOf = v.lastIndexOf(",");
+                            let attrValueObj = {};
+                            attrValueObj.name = v.substring(
+                                0,
+                                attrValueIndexOf
+                            );
+                            if (attrValueIndexOf == attrValueLastIndexOf) {
+                                //无图
+                                attrValueObj.id = v.substring(
+                                    attrValueIndexOf + 1
+                                );
+                            } else {
+                                attrValueObj.id = v.substring(
+                                    attrValueIndexOf + 1,
+                                    attrValueLastIndexOf
+                                );
+                                attrValueObj.cover =
+                                    api.baseUrl +
+                                    v.substring(attrValueLastIndexOf + 1);
+                            }
+                            attrKeyObj.attrValue.push(attrValueObj);
                         });
-                        obj.v = treeV;
-                        tree.push(obj);
+                        this.sku.push(attrKeyObj);
                     }
-                    this.skuData.sku.tree = tree;
-                    // list
-                    let list = [];
-                    goodsSpecs.forEach((v) => {
-                        let obj = {};
-                        obj.id = v.id;
-                        obj.price = v.price;
-                        obj.stock_num = v.stock;
-                        let specs = JSON.parse(v.specs);
-                        for (let i in specs) {
-                            let indexOf = i.indexOf("-");
-                            obj["s" + i.substring(indexOf + 1)] = specs[
-                                i
-                            ].substring(0, indexOf);
-                        }
-                        list.push(obj);
-                    });
-                    this.skuData.sku.list = list;
-                    this.skuData.sku.price =
-                        this.discountPrice > 0
-                            ? this.discountPrice
-                            : this.originalPrice;
-                    this.skuData.sku.stock_num = goodsInfo.stock;
-                    this.skuData.sku.none_sku = false;
-                    this.skuData.sku.hide_stock = false;
-                    this.skuData.goods = {
-                        title: this.mainTitle,
-                        picture: this.cover[0],
-                    };
-                    console.log(this.skuData);
+                    console.log(goodsSpecs);
                 })
                 .catch((err) => {
                     this.$toast(err.message);
