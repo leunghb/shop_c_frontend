@@ -98,3 +98,18 @@ export function getMutipSort(arr) {
         return tmp;
     }
 }
+
+export function arrayIntersect(a, b) {
+    // return a.filter(function (v) { return b.indexOf(v) > -1 })
+    return a.filter(item => b.includes(item));
+};
+
+export function arrayRemoveItem(arr, item) {
+    arr.forEach(v => {
+        let index = arr.indexOf(null);
+        if (index != -1) {
+            arr.splice(index, 1);
+        }
+    })
+    return arr;
+}

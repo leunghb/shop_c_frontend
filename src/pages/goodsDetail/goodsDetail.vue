@@ -67,28 +67,49 @@
                 <div class="stock">剩余111件</div>
                 <div class="selected">已选</div>
                 <div class="clearBoth"></div>
+                {{ selectedSku }}
+                <div></div>
+                {{ selectedSkuIndex }}
                 <div
                     class="attr"
-                    v-for="attrKeyItem in sku"
+                    v-for="(attrKeyItem, attrKeyIndex) in sku"
                     :key="attrKeyItem.id"
-                    :attrKeyId="attrKeyItem.id"
                 >
-                    <div
-                        class="attrKey"
-                        v-text="attrKeyItem.name+attrKeyItem.id"
-                    ></div>
+                    <div class="attrKey" v-text="attrKeyItem.name"></div>
                     <span
-                        class="attrValue"
-                        v-for="attrValueItem in attrKeyItem.attrValue"
+                        :class="[
+                            'attrValue',
+                            attrValueIndex == selectedSkuIndex[attrKeyIndex]
+                                ? 'active'
+                                : '',
+                            !attrValueItem.selectable ? 'disable' : '',
+                        ]"
+                        v-for="(attrValueItem,
+                        attrValueIndex) in attrKeyItem.attrValue"
                         :key="attrValueItem.id"
-                        :attrValueId="attrValueItem.id"
+                        @click="
+                            selectSku(
+                                attrKeyIndex,
+                                attrValueIndex,
+                                attrKeyItem.id,
+                                attrValueItem.id
+                            )
+                        "
                     >
                         <img
                             v-if="attrValueItem.cover"
                             :src="attrValueItem.cover"
                             alt=""
                         />
-                        <span class="name" v-text="attrValueItem.name+attrValueItem.id"></span>
+                        <span
+                            class="name"
+                            v-text="
+                                attrValueItem.name +
+                                attrKeyItem.id +
+                                '===' +
+                                attrValueItem.id
+                            "
+                        ></span>
                     </span>
                 </div>
             </div>
@@ -104,6 +125,7 @@
 <script>
 import Back from "../../components/backToPrevious/backToPrevious";
 import { post, api } from "../../utils/httpApi";
+import { arrayIntersect, arrayRemoveItem } from "../../utils/common";
 
 export default {
     data() {
@@ -120,6 +142,9 @@ export default {
 
             showSku: true,
             sku: [],
+            selectedSku: [], //已选规格
+            selectedSkuIndex: [],
+            selectablePlan: [], //可选规格方案
         };
     },
     components: {
@@ -134,6 +159,7 @@ export default {
         coverChange(index) {
             this.currentCover = index;
         },
+        //商品详情数据
         getGoodsDetail() {
             let params = this.$qs.stringify({
                 goodsId: this.goodsId,
@@ -171,6 +197,7 @@ export default {
                                 0,
                                 attrValueIndexOf
                             );
+                            attrValueObj.selectable = true; //是否可选
                             if (attrValueIndexOf == attrValueLastIndexOf) {
                                 //无图
                                 attrValueObj.id = v.substring(
@@ -185,18 +212,79 @@ export default {
                                     api.baseUrl +
                                     v.substring(attrValueLastIndexOf + 1);
                             }
+                            attrValueObj.keyValue =
+                                attrKeyObj.id + "-" + attrValueObj.id;
                             attrKeyObj.attrValue.push(attrValueObj);
                         });
                         this.sku.push(attrKeyObj);
                     }
-                    console.log(goodsSpecs);
+                    this.selectedSku = new Array(this.sku.length).fill(null);
+                    this.selectedSkuIndex = new Array(this.sku.length).fill(
+                        null
+                    );
+                    goodsSpecs.forEach((v) => {
+                        v.specs = v.specs.split(",");
+                        this.selectablePlan.push(v);
+                    });
                 })
                 .catch((err) => {
                     this.$toast(err.message);
                 });
         },
-        onBuyClicked() {},
-        onAddCartClicked() {},
+        //选中规格
+        selectSku(
+            attrKeyIndex,
+            attrValueIndex,
+            attrKeyItemId,
+            attrValueItemId
+        ) {
+            console.log("===");
+            if (this.selectedSkuIndex[attrKeyIndex] == attrValueIndex) {
+                attrKeyItemId = null;
+                attrValueItemId = null;
+                attrValueIndex = null;
+            }
+            this.$set(
+                this.selectedSku,
+                attrKeyIndex,
+                attrKeyItemId == null
+                    ? null
+                    : attrKeyItemId + "-" + attrValueItemId
+            );
+            let selectedSku = this.selectedSku.slice(0);
+            arrayRemoveItem(selectedSku, null);
+            this.$set(this.selectedSkuIndex, attrKeyIndex, attrValueIndex);
+            let selectablePlan = [];
+            this.selectablePlan.forEach((planV) => {
+                let specs = planV.specs;
+                if (
+                    arrayIntersect(specs, this.selectedSku).length ==
+                    selectedSku.length
+                ) {
+                    // 求可选方案，已选规格与可选规格交集（已选规格数目 == 交集长度）
+                    selectablePlan.push(specs);
+                }
+            });
+            console.log(selectablePlan);
+            console.log("selectablePlan=======");
+            this.selectedSku.forEach((selectedSkuV, selectedSkuK) => {
+                if (selectedSkuV == null) {
+                    this.sku[selectedSkuK].attrValue.forEach(
+                        (skuAttrValueV) => {
+                            selectablePlan.forEach((planV) => {
+                                if (
+                                    skuAttrValueV.keyValue ==
+                                    planV[selectedSkuK]
+                                ) {
+                                    console.log("1111");
+                                    return;
+                                }
+                            });
+                        }
+                    );
+                }
+            });
+        },
     },
 };
 </script>
