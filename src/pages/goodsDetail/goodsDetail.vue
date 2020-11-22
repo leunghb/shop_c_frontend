@@ -107,7 +107,9 @@
                                 attrValueItem.name +
                                 attrKeyItem.id +
                                 '===' +
-                                attrValueItem.id
+                                attrValueItem.id +
+                                '--' +
+                                attrValueItem.selectable
                             "
                         ></span>
                     </span>
@@ -125,7 +127,11 @@
 <script>
 import Back from "../../components/backToPrevious/backToPrevious";
 import { post, api } from "../../utils/httpApi";
-import { arrayIntersect, arrayRemoveItem } from "../../utils/common";
+import {
+    arrayIntersect,
+    arrayRemoveItem,
+    isAllEqual,
+} from "../../utils/common";
 
 export default {
     data() {
@@ -144,7 +150,7 @@ export default {
             sku: [],
             selectedSku: [], //已选规格
             selectedSkuIndex: [],
-            selectablePlan: [], //可选规格方案
+            allSkuPlan: [], //所有规格方案
         };
     },
     components: {
@@ -224,7 +230,7 @@ export default {
                     );
                     goodsSpecs.forEach((v) => {
                         v.specs = v.specs.split(",");
-                        this.selectablePlan.push(v);
+                        this.allSkuPlan.push(v);
                     });
                 })
                 .catch((err) => {
@@ -240,6 +246,7 @@ export default {
         ) {
             console.log("===");
             if (this.selectedSkuIndex[attrKeyIndex] == attrValueIndex) {
+                //已选择过
                 attrKeyItemId = null;
                 attrValueItemId = null;
                 attrValueIndex = null;
@@ -254,36 +261,54 @@ export default {
             let selectedSku = this.selectedSku.slice(0);
             arrayRemoveItem(selectedSku, null);
             this.$set(this.selectedSkuIndex, attrKeyIndex, attrValueIndex);
-            let selectablePlan = [];
-            this.selectablePlan.forEach((planV) => {
+            let allSkuPlan = [];
+            this.allSkuPlan.forEach((planV) => {
                 let specs = planV.specs;
                 if (
                     arrayIntersect(specs, this.selectedSku).length ==
                     selectedSku.length
                 ) {
                     // 求可选方案，已选规格与可选规格交集（已选规格数目 == 交集长度）
-                    selectablePlan.push(specs);
+                    allSkuPlan.push(specs);
                 }
             });
-            console.log(selectablePlan);
-            console.log("selectablePlan=======");
+            console.log(allSkuPlan);
+            console.log("allSkuPlan=======");
             this.selectedSku.forEach((selectedSkuV, selectedSkuK) => {
+                //未选择的规格组
                 if (selectedSkuV == null) {
                     this.sku[selectedSkuK].attrValue.forEach(
-                        (skuAttrValueV) => {
-                            selectablePlan.forEach((planV) => {
-                                if (
-                                    skuAttrValueV.keyValue ==
-                                    planV[selectedSkuK]
-                                ) {
-                                    console.log("1111");
-                                    return;
-                                }
+                        (skuAttrValueV, skuAttrValueK) => {
+                            //已过滤可选规格方案
+                            let arr = [];
+                            allSkuPlan.forEach((planV) => {
+                                arr.push(planV[selectedSkuK]);
                             });
+                            //未选择的规格组的项是否在已过滤可选规格方案中，可选
+                            if (arr.includes(skuAttrValueV.keyValue)) {
+                                this.sku[selectedSkuK].attrValue[
+                                    skuAttrValueK
+                                ].selectable = true;
+                            } else {
+                                //置灰
+                                this.sku[selectedSkuK].attrValue[
+                                    skuAttrValueK
+                                ].selectable = false;
+                            }
+                            // FIXED 已选择项需要在其他规格组选择之后再次判断是否可选
                         }
                     );
                 }
             });
+            //选择过之后全部未选
+            if (isAllEqual(this.selectedSku)) {
+                this.sku.forEach((v) => {
+                    v.attrValue.forEach((_v) => {
+                        _v.selectable = true;
+                    });
+                });
+                return false;
+            }
         },
     },
 };
