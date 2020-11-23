@@ -62,9 +62,20 @@
 
         <van-overlay class="sku" :show="showSku" @click="showSku = false">
             <div class="wrapper" @click.stop>
-                <img class="cover" src="" alt="" />
-                <div class="price"><span>￥</span><span>11.00</span></div>
-                <div class="stock">剩余111件</div>
+                <img
+                    class="cover"
+                    :src="skuCover != undefined ? skuCover : cover[0]"
+                    alt=""
+                />
+                <div class="price">
+                    <span>￥</span>
+                    <span v-text="allSelected ? skuPrice : price"></span>
+                </div>
+                <div class="stock">
+                    <span>剩余</span>
+                    <span v-text="allSelected ? skuStock : totalStock"></span>
+                    <span>件</span>
+                </div>
                 <div
                     class="selected"
                     v-show="hasSelect"
@@ -94,7 +105,8 @@
                                 attrValueIndex,
                                 attrKeyItem.id,
                                 attrValueItem.id,
-                                attrValueItem.selectable
+                                attrValueItem.selectable,
+                                attrValueItem.cover
                             )
                         "
                     >
@@ -123,6 +135,7 @@ import {
     arrayIntersect,
     arrayRemoveItem,
     isAllEqual,
+    arrayEquals,
 } from "../../utils/common";
 
 export default {
@@ -137,13 +150,18 @@ export default {
             originalPrice: 0,
             discountPrice: 0,
             salesVolume: 0,
+            totalStock: 0,
+            price: 0,
 
             showSku: true,
             sku: [],
             selectedSku: [], //已选规格
-            selectedSkuIndex: [],
+            selectedSkuIndex: [], //出现 xxx-0 则为该规格组不可选
             selectedSkuText: "",
             allSkuPlan: [], //所有规格方案
+            skuStock: 0,
+            skuPrice: 0,
+            skuCover: null,
         };
     },
     components: {
@@ -181,6 +199,11 @@ export default {
                     this.originalPrice = goodsInfo.originalPrice;
                     this.discountPrice = goodsInfo.discountPrice;
                     this.salesVolume = goodsInfo.salesVolume;
+                    this.totalStock = goodsInfo.stock;
+                    this.price =
+                        goodsInfo.discountPrice > 0
+                            ? goodsInfo.discountPrice
+                            : goodsInfo.originalPrice;
                     let sku = JSON.parse(goodsInfo.sku);
                     for (let i in sku) {
                         let attrKeyIndexOf = i.indexOf(",");
@@ -236,9 +259,14 @@ export default {
             attrValueIndex,
             attrKeyItemId,
             attrValueItemId,
-            selectable
+            selectable,
+            attrValueItemCover
         ) {
             if (!selectable) return false;
+
+            if (attrValueItemCover != undefined) {
+                this.skuCover = attrValueItemCover;
+            }
 
             //前面已选择的规格组再次选择不同规格，重置后面的规格组
             for (let i = 0; i < this.selectedSku.length; i++) {
@@ -249,6 +277,10 @@ export default {
                         canSelect = true;
                     }
                 });
+                if (!canSelect) {
+                    this.selectedSku[i] = this.sku[i].id + "-0";
+                }
+                //规格组全部选项不能选择不计入判断 canSelect
                 if (
                     this.selectedSku[i] == null &&
                     i < attrKeyIndex &&
@@ -334,7 +366,7 @@ export default {
             });
             //选择过之后全部未选
             if (isAllEqual(this.selectedSku)) {
-                console.log("====");
+                this.skuCover = undefined;
                 this.sku.forEach((v) => {
                     v.attrValue.forEach((_v) => {
                         _v.selectable = true;
@@ -346,7 +378,22 @@ export default {
     },
     computed: {
         hasSelect() {
+            //是否全部相等，初始为[null,null...]，false=>至少选择一个规格
             return !isAllEqual(this.selectedSku);
+        },
+        allSelected() {
+            //是否全部选择（不包含无法选择的规格组，并且该下标值设为xxx-0,如：[1-1,2-0,3-2]）
+            let allSelected = !this.selectedSku.includes(null); //true=>未全选
+            if (allSelected) {
+                this.allSkuPlan.forEach((v) => {
+                    if (arrayEquals(this.selectedSku, v.specs)) {
+                        console.log(v);
+                        this.skuStock = v.stock;
+                        this.skuPrice = v.price;
+                    }
+                });
+            }
+            return allSelected;
         },
     },
 };
