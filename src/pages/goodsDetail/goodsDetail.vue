@@ -65,11 +65,12 @@
                 <img class="cover" src="" alt="" />
                 <div class="price"><span>￥</span><span>11.00</span></div>
                 <div class="stock">剩余111件</div>
-                <div class="selected">已选</div>
+                <div
+                    class="selected"
+                    v-show="hasSelect"
+                    v-text="'已选 ' + selectedSkuText"
+                ></div>
                 <div class="clearBoth"></div>
-                {{ selectedSku }}
-                <div></div>
-                {{ selectedSkuIndex }}
                 <div
                     class="attr"
                     v-for="(attrKeyItem, attrKeyIndex) in sku"
@@ -92,7 +93,8 @@
                                 attrKeyIndex,
                                 attrValueIndex,
                                 attrKeyItem.id,
-                                attrValueItem.id
+                                attrValueItem.id,
+                                attrValueItem.selectable
                             )
                         "
                     >
@@ -101,17 +103,7 @@
                             :src="attrValueItem.cover"
                             alt=""
                         />
-                        <span
-                            class="name"
-                            v-text="
-                                attrValueItem.name +
-                                attrKeyItem.id +
-                                '===' +
-                                attrValueItem.id +
-                                '--' +
-                                attrValueItem.selectable
-                            "
-                        ></span>
+                        <span class="name" v-text="attrValueItem.name"></span>
                     </span>
                 </div>
             </div>
@@ -150,6 +142,7 @@ export default {
             sku: [],
             selectedSku: [], //已选规格
             selectedSkuIndex: [],
+            selectedSkuText: "",
             allSkuPlan: [], //所有规格方案
         };
     },
@@ -242,9 +235,38 @@ export default {
             attrKeyIndex,
             attrValueIndex,
             attrKeyItemId,
-            attrValueItemId
+            attrValueItemId,
+            selectable
         ) {
-            console.log("===");
+            if (!selectable) return false;
+
+            //前面已选择的规格组再次选择不同规格，重置后面的规格组
+            for (let i = 0; i < this.selectedSku.length; i++) {
+                let canSelect = false;
+                this.sku[i].attrValue.forEach((v) => {
+                    //判断前面未选择的规格组的项是否全部不能选择
+                    if (v.selectable) {
+                        canSelect = true;
+                    }
+                });
+                if (
+                    this.selectedSku[i] == null &&
+                    i < attrKeyIndex &&
+                    canSelect
+                ) {
+                    this.$toast("请先选择" + this.sku[i].name);
+                    return false;
+                }
+                if (i > attrKeyIndex) {
+                    this.selectedSku[i] = null;
+                }
+            }
+            this.selectedSkuIndex.forEach((v, k) => {
+                if (k > attrKeyIndex) {
+                    this.selectedSkuIndex[k] = null;
+                }
+            });
+
             if (this.selectedSkuIndex[attrKeyIndex] == attrValueIndex) {
                 //已选择过
                 attrKeyItemId = null;
@@ -258,9 +280,21 @@ export default {
                     ? null
                     : attrKeyItemId + "-" + attrValueItemId
             );
+
             let selectedSku = this.selectedSku.slice(0);
             arrayRemoveItem(selectedSku, null);
             this.$set(this.selectedSkuIndex, attrKeyIndex, attrValueIndex);
+            this.selectedSkuText = "";
+            this.selectedSkuIndex.forEach((v, k) => {
+                if (v != null) {
+                    this.selectedSkuText += this.sku[k].attrValue[v].name + ",";
+                }
+            });
+            this.selectedSkuText = this.selectedSkuText.substring(
+                0,
+                this.selectedSkuText.length - 1
+            );
+
             let allSkuPlan = [];
             this.allSkuPlan.forEach((planV) => {
                 let specs = planV.specs;
@@ -272,8 +306,7 @@ export default {
                     allSkuPlan.push(specs);
                 }
             });
-            console.log(allSkuPlan);
-            console.log("allSkuPlan=======");
+
             this.selectedSku.forEach((selectedSkuV, selectedSkuK) => {
                 //未选择的规格组
                 if (selectedSkuV == null) {
@@ -295,13 +328,13 @@ export default {
                                     skuAttrValueK
                                 ].selectable = false;
                             }
-                            // FIXED 已选择项需要在其他规格组选择之后再次判断是否可选
                         }
                     );
                 }
             });
             //选择过之后全部未选
             if (isAllEqual(this.selectedSku)) {
+                console.log("====");
                 this.sku.forEach((v) => {
                     v.attrValue.forEach((_v) => {
                         _v.selectable = true;
@@ -309,6 +342,11 @@ export default {
                 });
                 return false;
             }
+        },
+    },
+    computed: {
+        hasSelect() {
+            return !isAllEqual(this.selectedSku);
         },
     },
 };
