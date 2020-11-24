@@ -78,6 +78,13 @@ export default new Router({
             meta: {
                 keepAlive: false,
             }
+        }, {
+            path: '/AddressList',
+            name: 'AddressList',
+            component: () => import('@/pages/address/addressList'),
+            meta: {
+                keepAlive: false,
+            }
         }
     ]
 })

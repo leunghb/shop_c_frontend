@@ -4,7 +4,7 @@
 
         <van-swipe
             class="my-swipe cover"
-            :autoplay="3000"
+            :autoplay="showSku ? 0 : 3000"
             indicator-color="white"
             @change="coverChange"
         >
@@ -46,12 +46,16 @@
         <div class="specifications">
             <div class="label">选择</div>
             <van-icon name="arrow" />
-            <div class="value">规格</div>
+            <div
+                class="value"
+                @click="showSku = true"
+                v-text="allSelected ? selectedSkuText : '规格'"
+            ></div>
         </div>
         <div class="address">
             <div class="label">地址</div>
             <van-icon name="arrow" />
-            <div class="value">厦门</div>
+            <div class="value" @click="toAddressList()">厦门</div>
         </div>
         <div class="evaluate">
             <div class="label">评价</div>
@@ -62,61 +66,86 @@
 
         <van-overlay class="sku" :show="showSku" @click="showSku = false">
             <div class="wrapper" @click.stop>
-                <img
-                    class="cover"
-                    :src="skuCover != undefined ? skuCover : cover[0]"
-                    alt=""
-                />
-                <div class="price">
-                    <span>￥</span>
-                    <span v-text="allSelected ? skuPrice : price"></span>
-                </div>
-                <div class="stock">
-                    <span>剩余</span>
-                    <span v-text="allSelected ? skuStock : totalStock"></span>
-                    <span>件</span>
-                </div>
-                <div
-                    class="selected"
-                    v-show="hasSelect"
-                    v-text="'已选 ' + selectedSkuText"
-                ></div>
-                <div class="clearBoth"></div>
-                <div
-                    class="attr"
-                    v-for="(attrKeyItem, attrKeyIndex) in sku"
-                    :key="attrKeyItem.id"
-                >
-                    <div class="attrKey" v-text="attrKeyItem.name"></div>
-                    <span
-                        :class="[
-                            'attrValue',
-                            attrValueIndex == selectedSkuIndex[attrKeyIndex]
-                                ? 'active'
-                                : '',
-                            !attrValueItem.selectable ? 'disable' : '',
-                        ]"
-                        v-for="(attrValueItem,
-                        attrValueIndex) in attrKeyItem.attrValue"
-                        :key="attrValueItem.id"
-                        @click="
-                            selectSku(
-                                attrKeyIndex,
-                                attrValueIndex,
-                                attrKeyItem.id,
-                                attrValueItem.id,
-                                attrValueItem.selectable,
-                                attrValueItem.cover
-                            )
+                <div class="top">
+                    <img
+                        class="cover"
+                        :src="skuCover != undefined ? skuCover : cover[0]"
+                        alt=""
+                    />
+                    <div class="price">
+                        <span>￥</span>
+                        <span v-text="allSelected ? skuPrice : price"></span>
+                    </div>
+                    <div class="stock">
+                        <span>剩余</span>
+                        <span
+                            v-text="allSelected ? skuStock : totalStock"
+                        ></span>
+                        <span>件</span>
+                    </div>
+                    <div
+                        class="selected"
+                        v-show="hasSelect"
+                        v-text="
+                            '已选 ' + selectedSkuText + ' x' + numberOfpurchases
                         "
+                    ></div>
+                    <div class="clearBoth"></div>
+                </div>
+                <div class="center">
+                    <div
+                        class="attr"
+                        v-for="(attrKeyItem, attrKeyIndex) in sku"
+                        :key="attrKeyItem.id"
                     >
-                        <img
-                            v-if="attrValueItem.cover"
-                            :src="attrValueItem.cover"
-                            alt=""
+                        <div class="attrKey" v-text="attrKeyItem.name"></div>
+                        <span
+                            :class="[
+                                'attrValue',
+                                attrValueIndex == selectedSkuIndex[attrKeyIndex]
+                                    ? 'active'
+                                    : '',
+                                !attrValueItem.selectable ? 'disable' : '',
+                            ]"
+                            v-for="(attrValueItem,
+                            attrValueIndex) in attrKeyItem.attrValue"
+                            :key="attrValueItem.id"
+                            @click="
+                                selectSku(
+                                    attrKeyIndex,
+                                    attrValueIndex,
+                                    attrKeyItem.id,
+                                    attrValueItem.id,
+                                    attrValueItem.selectable,
+                                    attrValueItem.cover
+                                )
+                            "
+                        >
+                            <img
+                                v-if="attrValueItem.cover"
+                                :src="attrValueItem.cover"
+                                alt=""
+                            />
+                            <span
+                                class="name"
+                                v-text="attrValueItem.name"
+                            ></span>
+                        </span>
+                    </div>
+                    <div class="numberOfpurchases">
+                        <div class="label">购买数量</div>
+                        <van-stepper
+                            class="numberInput"
+                            v-model="numberOfpurchases"
+                            :min="minNumberOfpurchases"
+                            :max="maxNumberOfpurchases"
+                            integer
                         />
-                        <span class="name" v-text="attrValueItem.name"></span>
-                    </span>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="cart" @click="addToCart()">购物车</div>
+                    <div class="buy" @click="buy()">购买</div>
                 </div>
             </div>
         </van-overlay>
@@ -153,15 +182,19 @@ export default {
             totalStock: 0,
             price: 0,
 
-            showSku: true,
+            showSku: false,
             sku: [],
             selectedSku: [], //已选规格
             selectedSkuIndex: [], //出现 xxx-0 则为该规格组不可选
             selectedSkuText: "",
             allSkuPlan: [], //所有规格方案
-            skuStock: 0,
+            skuStock: 0, //规格单品库存
             skuPrice: 0,
             skuCover: null,
+
+            numberOfpurchases: 1, //购买数量,
+            minNumberOfpurchases: 1,
+            maxNumberOfpurchases: null,
         };
     },
     components: {
@@ -200,6 +233,7 @@ export default {
                     this.discountPrice = goodsInfo.discountPrice;
                     this.salesVolume = goodsInfo.salesVolume;
                     this.totalStock = goodsInfo.stock;
+                    this.maxNumberOfpurchases = goodsInfo.stock;
                     this.price =
                         goodsInfo.discountPrice > 0
                             ? goodsInfo.discountPrice
@@ -290,6 +324,7 @@ export default {
                     return false;
                 }
                 if (i > attrKeyIndex) {
+                    this.maxNumberOfpurchases = this.totalStock;
                     this.selectedSku[i] = null;
                 }
             }
@@ -371,9 +406,17 @@ export default {
                     v.attrValue.forEach((_v) => {
                         _v.selectable = true;
                     });
+                    this.maxNumberOfpurchases = this.totalStock;
                 });
                 return false;
             }
+        },
+        addToCart() {},
+        buy() {},
+        toAddressList() {
+            this.$router.push({
+                path: "/AddressList",
+            });
         },
     },
     computed: {
@@ -387,8 +430,8 @@ export default {
             if (allSelected) {
                 this.allSkuPlan.forEach((v) => {
                     if (arrayEquals(this.selectedSku, v.specs)) {
-                        console.log(v);
                         this.skuStock = v.stock;
+                        this.maxNumberOfpurchases = v.stock;
                         this.skuPrice = v.price;
                     }
                 });

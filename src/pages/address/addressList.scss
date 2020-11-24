@@ -1,0 +1,18 @@
+.addressList {
+    .back {
+        background-color: #fff;
+        z-index: 2;
+    }
+    .list {
+        position: absolute;
+        top: 48px;
+        z-index: 1;
+        width: 100%;
+        >>> .van-button--danger, 
+        >>>.van-address-item .van-radio__icon--checked .van-icon, 
+        >>>.van-tag--danger {
+            background-color: #3391c9;
+            border: none;
+        }
+    }
+}
