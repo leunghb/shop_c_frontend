@@ -39,6 +39,7 @@ export const api = {
     login: url + user + "login", //登录
     forgetPwd: url + user + "updatePwd",//修改密码
     getUserBalanceRecord: url + user + "getUserBalanceRecord", //用户余额使用记录
+    getAddressList: url + user + "getAddressList", //获取用户地址
 
     // 商品
     getGoodsType: url + goods + "getGoodsType", //商品分类

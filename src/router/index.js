@@ -85,6 +85,13 @@ export default new Router({
             meta: {
                 keepAlive: false,
             }
+        }, {
+            path: '/AddressDetail',
+            name: 'AddressDetail',
+            component: () => import('@/pages/address/addressDetail'),
+            meta: {
+                keepAlive: false,
+            }
         }
     ]
 })

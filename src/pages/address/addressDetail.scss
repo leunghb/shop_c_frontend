@@ -1,0 +1,36 @@
+.addressDetail {
+    padding-top: 48px;
+    >>> .van-address-edit {
+        margin-top: 48px;
+    }
+    >>> .van-cell.van-cell--clickable.van-field {
+        display: none;
+    }
+    >>> .van-button--danger {
+        background-color: #3391c9;
+        border: none;
+    }
+    >>>.van-switch--on {
+        background-color: #3391c9;
+    }
+    .save,.del {
+        position: relative;
+        left: 15px;
+        width: calc(100% - 30px);
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 14px;
+        box-sizing: border-box;
+        border-radius: 20px;
+    }
+    .save {
+        margin-top: 40px;
+        background-color: #3391c9;
+        color: #fff;
+    }
+    .del {
+        margin-top: 20px;
+        border: 1px solid #f0f0f0;
+    }
+}

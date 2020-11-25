@@ -6,8 +6,8 @@
                 v-model="chosenAddressId"
                 :list="list"
                 default-tag-text="默认"
-                @add="onAdd"
-                @edit="onEdit"
+                @add="addAddress"
+                @edit="editAddress"
             />
         </div>
     </div>
@@ -15,65 +15,58 @@
 
 <script>
 import Back from "../../components/backToPrevious/backToPrevious";
+import { api, get } from "../../utils/httpApi";
 
 export default {
     data() {
         return {
             chosenAddressId: "1",
-            list: [
-                {
-                    id: "1",
-                    name: "张三",
-                    tel: "13000000000",
-                    address:
-                        "浙江省杭州市西湖区文三路 138 号东方通信大厦 7 楼 501 室",
-                    isDefault: true,
-                },
-                {
-                    id: "22",
-                    name: "李四",
-                    tel: "1310000000",
-                    address: "浙江省杭州市拱墅区莫干山路 50 号",
-                },
-                {
-                    id: "23",
-                    name: "李四",
-                    tel: "1310000000",
-                    address: "浙江省杭州市拱墅区莫干山路 50 号",
-                },
-                {
-                    id: "24",
-                    name: "李四",
-                    tel: "1310000000",
-                    address: "浙江省杭州市拱墅区莫干山路 50 号",
-                },
-                {
-                    id: "25",
-                    name: "李四",
-                    tel: "1310000000",
-                    address: "浙江省杭州市拱墅区莫干山路 50 号",
-                },
-                {
-                    id: "26",
-                    name: "李四",
-                    tel: "1310000000",
-                    address: "浙江省杭州市拱墅区莫干山路 50 号",
-                },
-            ],
+            list: [],
         };
     },
     components: {
         Back,
     },
+    created() {
+        this.getAddressList();
+    },
     methods: {
-        onAdd() {
+        getAddressList() {
+            get(api.getAddressList)
+                .then((res) => {
+                    let data = res.data.data;
+                    data.forEach((v) => {
+                        v.isDefault = v.isDefault == 1 ? true : false;
+                    });
+                    this.list = data;
+                })
+                .catch((err) => {
+                    this.$toast(err.message);
+                });
+        },
+        addAddress() {
             if (this.list.length == 6) {
                 this.$toast("最多添加六个地址");
                 return false;
             }
+            this.$router.push({
+                path: "/AddressDetail",
+                query: {
+                    type: 0,
+                },
+            });
         },
-        onEdit(item, index) {
-            console.log("编辑地址:" + index);
+        editAddress(item, index) {
+            let info = JSON.stringify({
+                item: item,
+            });
+            this.$router.push({
+                path: "/AddressDetail",
+                query: {
+                    info: info,
+                    type: 1,
+                },
+            });
         },
     },
 };
