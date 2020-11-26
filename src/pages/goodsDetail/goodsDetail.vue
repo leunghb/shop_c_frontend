@@ -55,7 +55,11 @@
         <div class="address">
             <div class="label">地址</div>
             <van-icon name="arrow" />
-            <div class="value" @click="toAddressList()">厦门</div>
+            <div
+                class="value"
+                @click="toAddressList()"
+                v-text="address.name + '—' + address.address"
+            ></div>
         </div>
         <div class="evaluate">
             <div class="label">评价</div>
@@ -144,22 +148,24 @@
                     </div>
                 </div>
                 <div class="bottom">
-                    <div class="cart" @click="addToCart()">购物车</div>
+                    <div class="cart" @click="addToCart()">加入购物车</div>
                     <div class="buy" @click="buy()">购买</div>
                 </div>
             </div>
         </van-overlay>
 
         <div class="footer">
-            <div class="buy" @click="showSku = true">购买</div>
-            <div class="cart" @click="showSku = true">加入购物车</div>
+            <div class="inner">
+                <div class="cart" @click="showSku = true">加入购物车</div>
+                <div class="buy" @click="showSku = true">购买</div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import Back from "../../components/backToPrevious/backToPrevious";
-import { post, api } from "../../utils/httpApi";
+import { post, api, get } from "../../utils/httpApi";
 import {
     arrayIntersect,
     arrayRemoveItem,
@@ -195,6 +201,8 @@ export default {
             numberOfpurchases: 1, //购买数量,
             minNumberOfpurchases: 1,
             maxNumberOfpurchases: null,
+
+            address: {},
         };
     },
     components: {
@@ -282,6 +290,7 @@ export default {
                         v.specs = v.specs.split(",");
                         this.allSkuPlan.push(v);
                     });
+                    this.getAddressList();
                 })
                 .catch((err) => {
                     this.$toast(err.message);
@@ -418,6 +427,19 @@ export default {
                 path: "/AddressList",
             });
         },
+        getAddressList() {
+            get(api.getAddressList)
+                .then((res) => {
+                    let data = res.data.data;
+                    let selectAddress = this.$globalVariable.address;
+                    this.address =
+                        JSON.stringify(selectAddress) != "{}"
+                            ? selectAddress
+                            : data[0];
+                    this.$globalVariable.address = {};
+                })
+                .catch((err) => {});
+        },
     },
     computed: {
         hasSelect() {
@@ -430,6 +452,7 @@ export default {
             if (allSelected) {
                 this.allSkuPlan.forEach((v) => {
                     if (arrayEquals(this.selectedSku, v.specs)) {
+                        console.log(v);
                         this.skuStock = v.stock;
                         this.maxNumberOfpurchases = v.stock;
                         this.skuPrice = v.price;

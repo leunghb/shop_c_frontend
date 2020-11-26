@@ -1,5 +1,5 @@
-let homePageScrollTop = 0;
+let address = {};
 
 export default {
-    homePageScrollTop
+    address,
 }

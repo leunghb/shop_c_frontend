@@ -8,6 +8,7 @@
                 default-tag-text="默认"
                 @add="addAddress"
                 @edit="editAddress"
+                @select="selectAddress"
             />
         </div>
     </div>
@@ -67,6 +68,13 @@ export default {
                     type: 1,
                 },
             });
+        },
+        selectAddress(item) {
+            this.$globalVariable.address = item;
+            this.$toast("已选择" + item.name + "-" + item.address + "做为地址");
+            let time = setTimeout(() => {
+                this.$router.go(-1);
+            }, 800);
         },
     },
 };
