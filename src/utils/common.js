@@ -1,3 +1,8 @@
+//验证手机号
+export function checkPhone(phone) {
+    return !/^((1[3,5,8,7,9][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/.test(phone);
+}
+
 //验证邮箱
 export function isEmail(str) {
     if (str.charAt(0) == "." || str.charAt(0) == "@" || str.indexOf('@', 0) == -1 ||

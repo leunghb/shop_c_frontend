@@ -40,6 +40,8 @@ export const api = {
     forgetPwd: url + user + "updatePwd",//修改密码
     getUserBalanceRecord: url + user + "getUserBalanceRecord", //用户余额使用记录
     getAddressList: url + user + "getAddressList", //获取用户地址
+    addOrPutAddress: url + user + "addOrPutAddress", //添加或更新用户地址
+    delAddress: url + user + "delAddress", //删除地址
 
     // 商品
     getGoodsType: url + goods + "getGoodsType", //商品分类

@@ -27,10 +27,13 @@
 
 <script>
 import Back from "../../components/backToPrevious/backToPrevious";
+import { checkPhone } from "../../utils/common";
+import { api, post } from "../../utils/httpApi";
 
 export default {
     data() {
         return {
+            id: null,
             name: "",
             tel: "",
             address: "",
@@ -46,6 +49,7 @@ export default {
         if (type == 1) {
             //编辑
             let info = JSON.parse(query.info);
+            this.id = info.item.id;
             this.name = info.item.name;
             this.tel = info.item.tel;
             this.address = info.item.address;
@@ -64,17 +68,65 @@ export default {
                 this.$toast("请输入手机号");
                 return false;
             }
+            if (checkPhone(this.tel)) {
+                this.$toast("请输入正确的手机号");
+                return false;
+            }
             if (this.address.length == 0) {
                 this.$toast("请输入详细地址");
                 return false;
             }
+            let params = this.$qs.stringify({
+                name: this.name,
+                tel: this.tel,
+                address: this.address,
+                isDefault: this.isDefault ? 1 : 0,
+                type: this.type,
+                id: this.id,
+            });
+            post(api.addOrPutAddress, params)
+                .then((res) => {
+                    let data = res.data;
+                    if (data.code == 0) {
+                        this.$toast(this.type == 0 ? "添加成功" : "修改成功");
+                        let time = setTimeout(() => {
+                            this.$router.go(-1);
+                            clearTimeout(time);
+                        }, 1500);
+                        return false;
+                    }
+                    this.$toast(data.message);
+                })
+                .catch((err) => {
+                    this.$toast(err.message);
+                });
         },
         del() {
             this.$dialog
                 .confirm({
                     title: "确认删除？",
                 })
-                .then(() => {})
+                .then(() => {
+                    let params = this.$qs.stringify({
+                        id: this.id,
+                    });
+                    post(api.delAddress, params)
+                        .then((res) => {
+                            let data = res.data;
+                            if (data.code == 0) {
+                                this.$toast("删除成功");
+                                let time = setTimeout(() => {
+                                    this.$router.go(-1);
+                                    clearTimeout(time);
+                                }, 1500);
+                                return false;
+                            }
+                            this.$toast(data.message);
+                        })
+                        .catch((err) => {
+                            this.$toast(err.message);
+                        });
+                })
                 .catch(() => {});
         },
     },
