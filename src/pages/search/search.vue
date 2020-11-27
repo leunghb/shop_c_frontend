@@ -99,7 +99,6 @@ export default {
             post(api.getGoods, params)
                 .then((res) => {
                     let data = res.data;
-                    console.log(data);
                     if (data.data.length == 0) {
                         this.finishedText = "换个商品吧 _(:з」∠)_";
                         this.finished = true;

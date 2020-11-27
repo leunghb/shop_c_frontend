@@ -6,16 +6,7 @@
             :key="index"
             @click="switchTab(item.path, index)"
         >
-            <i
-                :class="['iconfont', item.iconfont]"
-                v-show="index == 0 && !canBackToTop"
-            ></i>
-            <van-icon
-                class="backToTop"
-                name="arrow-up"
-                v-show="index == 0 && canBackToTop"
-            />
-            <i :class="['iconfont', item.iconfont]" v-if="index != 0"></i>
+            <i :class="['iconfont', item.iconfont]"></i>
             <div class="label" v-text="item.label"></div>
         </div>
     </div>
@@ -48,12 +39,10 @@ export default {
     created() {},
     methods: {
         switchTab(path, index) {
-            if (index == 0) {
-                this.$emit("homePageScrollTop", true);
-            }
             this.$router.push({
                 path: path,
             });
+            document.documentElement.scrollTop = 0;
         },
         scrollHandle(e) {
             let top = e.srcElement.scrollingElement.scrollTop;

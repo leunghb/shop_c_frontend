@@ -28,7 +28,7 @@ if (ENV == "development") {
 if (ENV == "production") {
     url = process.env.PROD_API_URL;
 }
-let user = "/user/", goods = "/goods/";
+let user = "/user/", goods = "/goods/", cart = "/cart/";
 export const api = {
     baseUrl: url,
     // 用户
@@ -48,6 +48,10 @@ export const api = {
     getGoodsList: url + goods + "getGoodsList", //商品列表
     getHotGoods: url + goods + "getHotGoods", //销量前几商品
     getGoodsDetail: url + goods + "getGoodsDetail", //商品详情
+
+    // 购物车
+    addGoodsToCart: url + cart + "addGoodsToCart", //添加商品到购物车
+    getCartList: url + cart + "getCartList", //购物车列表
 }
 
 export function get(url, params) {

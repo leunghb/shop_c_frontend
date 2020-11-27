@@ -111,8 +111,9 @@
                                     : '',
                                 !attrValueItem.selectable ? 'disable' : '',
                             ]"
-                            v-for="(attrValueItem,
-                            attrValueIndex) in attrKeyItem.attrValue"
+                            v-for="(
+                                attrValueItem, attrValueIndex
+                            ) in attrKeyItem.attrValue"
                             :key="attrValueItem.id"
                             @click="
                                 selectSku(
@@ -148,8 +149,14 @@
                     </div>
                 </div>
                 <div class="bottom">
-                    <div class="cart" @click="addToCart()">加入购物车</div>
-                    <div class="buy" @click="buy()">购买</div>
+                    <div class="cart" @click="addGoodsToCart()">
+                        <span>加入购物车</span>
+                        <span
+                            class="checkmark"
+                            v-show="showCartAnimation"
+                        ></span>
+                    </div>
+                    <div class="buy" @click="buy()"><span>购买</span></div>
                 </div>
             </div>
         </van-overlay>
@@ -194,6 +201,7 @@ export default {
             selectedSkuIndex: [], //出现 xxx-0 则为该规格组不可选
             selectedSkuText: "",
             allSkuPlan: [], //所有规格方案
+            currentSkuInfo: {},
             skuStock: 0, //规格单品库存
             skuPrice: 0,
             skuCover: null,
@@ -203,6 +211,8 @@ export default {
             maxNumberOfpurchases: null,
 
             address: {},
+
+            showCartAnimation: false,
         };
     },
     components: {
@@ -420,7 +430,33 @@ export default {
                 return false;
             }
         },
-        addToCart() {},
+        addGoodsToCart() {
+            let skuCover = this.skuCover.replace(api.baseUrl, "");
+            let currentSkuInfo = this.currentSkuInfo;
+            let params = this.$qs.stringify({
+                goodsSpecsId: currentSkuInfo.id,
+                goodsId: currentSkuInfo.goodsId,
+                number: this.numberOfpurchases,
+                skuDesc: this.selectedSkuText,
+                skuCover: skuCover,
+            });
+            post(api.addGoodsToCart, params)
+                .then((res) => {
+                    let data = res.data;
+                    console.log(data);
+                    if (data.code == 0) {
+                        this.showCartAnimation = true;
+                        let time = setTimeout(() => {
+                            this.showCartAnimation = false;
+                        }, 1200);
+                        return false;
+                    }
+                    this.$toast(data.message);
+                })
+                .catch((err) => {
+                    this.$toast(err.message);
+                });
+        },
         buy() {},
         toAddressList() {
             this.$router.push({
@@ -452,7 +488,7 @@ export default {
             if (allSelected) {
                 this.allSkuPlan.forEach((v) => {
                     if (arrayEquals(this.selectedSku, v.specs)) {
-                        console.log(v);
+                        this.currentSkuInfo = v;
                         this.skuStock = v.stock;
                         this.maxNumberOfpurchases = v.stock;
                         this.skuPrice = v.price;

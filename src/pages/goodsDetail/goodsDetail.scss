@@ -262,6 +262,59 @@
                     color: #fff;
                     text-align: center;
                     line-height: 40px;
+                    .checkmark {
+                        position: absolute;
+                        top: 10px;
+                        left: 130px;
+                        display: block;
+                        height: 18px;
+                        width: 18px;
+                        border: 2px solid #fff;
+                        border-radius: 50%;
+                        animation: checkmark 0.8s;
+                    }
+                    @keyframes checkmark {
+                        0% {
+                            border: 2px solid #FFC51D;
+                        }
+                        33.3333% {
+                            border: 2px solid #fff;
+                        }
+                    }
+                    .checkmark:after {
+                        position: absolute;
+                        margin-left: -13px;
+                        margin-top: 9px;
+                        animation: check 0.8s;
+                    }
+                    @keyframes check {
+                        0% {
+                            height: 0;
+                            width: 0;
+                        }
+                        33.3333% {
+                            width: 5px;
+                            height: 0;
+                        }
+                    }
+                    .checkmark:after {
+                        -moz-transform: scaleX(-1) rotate(135deg);
+                        -ms-transform: scaleX(-1) rotate(135deg);
+                        -webkit-transform: scaleX(-1) rotate(135deg);
+                        transform: scaleX(-1) rotate(135deg);
+                        -moz-transform-origin: left top;
+                        -ms-transform-origin: left top;
+                        -webkit-transform-origin: left top;
+                        transform-origin: left top;
+                        border-right: 3px solid #fff;
+                        border-top: 3px solid #fff;
+                        content: '';
+                        display: block;
+                        height: 10px;
+                        left: 14px;
+                        position: absolute;
+                        width: 5px;
+                    }
                 }
             }
         }

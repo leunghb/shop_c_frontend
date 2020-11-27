@@ -46,7 +46,7 @@ export default new Router({
                     name: 'Cart',
                     component: () => import('@/pages/cart/cart'),
                     meta: {
-                        keepAlive: true,
+                        keepAlive: false,
                     }
                 }, {
                     path: '/My',
