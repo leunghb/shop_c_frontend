@@ -15,14 +15,19 @@
                         v-model="item.checked"
                         @click="singleCheck(index)"
                     ></van-checkbox>
-
                     <van-card
-                        :num="item.number"
                         :price="item.price.toFixed(2)"
                         :desc="item.skuDesc"
                         :title="item.mainTitle"
                         class="goods-card card"
                         :thumb="item.cover"
+                    />
+                    <van-stepper
+                        class="number"
+                        v-model="item.number"
+                        min="1"
+                        :max="item.stock"
+                        integer
                     />
                     <template #right>
                         <van-button
@@ -30,6 +35,7 @@
                             text="删除"
                             type="danger"
                             class="delete-button"
+                            @click="del(index, item)"
                         />
                     </template>
                 </van-swipe-cell>
@@ -38,7 +44,7 @@
 
         <van-submit-bar
             class="submitBar"
-            :price="3050"
+            :price="totalPrice * 100"
             button-text="提交订单"
             @submit="onSubmit"
         >
@@ -64,6 +70,8 @@ export default {
 
             allChecked: false,
             listCheckedStatus: [],
+
+            totalPrice: 0,
         };
     },
     created() {},
@@ -130,6 +138,44 @@ export default {
             if (!this.listCheckedStatus.includes(false)) {
                 this.allChecked = true;
             }
+        },
+        del(index, item) {
+            this.$dialog
+                .confirm({
+                    title: "确认删除？",
+                })
+                .then(() => {
+                    let params = this.$qs.stringify({
+                        cartId: item.cartId,
+                    });
+                    post(api.delCartOneGoods, params)
+                        .then((res) => {
+                            let data = res.data;
+                            if (data.code == 0) {
+                                this.list.splice(index, 1);
+                                this.$toast("删除成功");
+                                return false;
+                            }
+                            this.$toast(data.message);
+                        })
+                        .catch((err) => {
+                            this.$toast(err.message);
+                        });
+                })
+                .catch(() => {});
+        },
+    },
+    watch: {
+        list: {
+            handler(newV, oldV) {
+                this.totalPrice = 0;
+                this.list.forEach((v) => {
+                    if (v.checked) {
+                        this.totalPrice += v.price * v.number;
+                    }
+                });
+            },
+            deep: true,
         },
     },
 };

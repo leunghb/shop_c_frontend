@@ -52,6 +52,7 @@ export const api = {
     // 购物车
     addGoodsToCart: url + cart + "addGoodsToCart", //添加商品到购物车
     getCartList: url + cart + "getCartList", //购物车列表
+    delCartOneGoods: url + cart + "delCartOneGoods", //购物车删除视频
 }
 
 export function get(url, params) {
