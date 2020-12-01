@@ -118,7 +118,32 @@ export default {
                     this.$toast(err.message);
                 });
         },
-        onSubmit() {},
+        onSubmit() {
+            let list = [];
+            this.list.forEach((v) => {
+                if (v.checked) {
+                    let obj = {
+                        cartId: v.cartId,
+                        goodsId: v.goodsId,
+                        cover: v.cover,
+                        mainTitle: v.mainTitle,
+                        selectedSkuText: v.skuDesc,
+                        skuStock: v.stock,
+                        skuPrice: v.price,
+                        skuCover: v.cover,
+                        numberOfpurchases: v.number,
+                        goodsSpecsId: v.goodsSpecsId,
+                    };
+                    list.push(obj);
+                }
+            });
+            this.$router.push({
+                path: "/OrderDetail",
+                query: {
+                    data: JSON.stringify(list),
+                },
+            });
+        },
         checkAll() {
             let hasUnselected = this.listCheckedStatus.includes(false);
             this.list.forEach((v, k) => {

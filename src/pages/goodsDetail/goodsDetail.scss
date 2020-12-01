@@ -123,14 +123,31 @@
         width: 100%;
         height: 50px;
         background-color: #fff;
-        .inner {
+        .left {
             position: absolute;
             display: flex;
-            bottom: 5px;
             justify-content: center;
             left: 15px;
+            width: 30%;
+            height: 50px;
+            .van-icon {
+                margin: 0 10px;
+                font-size: 30px;
+                line-height: 50px;
+                color: #9e9e9e;
+            }
+            >>>.van-icon-goods-collect {
+                color: #f24b08;
+            }
+        }
+        .right {
+            position: absolute;
+            display: flex;
+            right: 15px;
+            bottom: 5px;
+            justify-content: center;
             height: 40px;
-            width: calc(100% - 30px);
+            width: 60%;
             border-radius: 20px;
             background-image: linear-gradient(to left,#3391c9, rgb(255, 122, 122) ,#FFC51D);
             div {

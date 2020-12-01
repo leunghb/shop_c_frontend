@@ -162,9 +162,16 @@
         </van-overlay>
 
         <div class="footer">
-            <div class="inner">
-                <div class="cart" @click="showSku = true">加入购物车</div>
-                <div class="buy" @click="showSku = true">购买</div>
+            <div class="left">
+                <van-icon name="cart-o" @click="toCart" />
+                <van-icon
+                    :name="isCollect ? 'goods-collect' : 'goods-collect-o'"
+                    @click="collectGoods"
+                />
+            </div>
+            <div class="right" @click="showSku = true">
+                <div class="cart">加入购物车</div>
+                <div class="buy">购买</div>
             </div>
         </div>
     </div>
@@ -213,6 +220,8 @@ export default {
             address: {},
 
             showCartAnimation: false,
+
+            isCollect: true,
         };
     },
     components: {
@@ -256,7 +265,7 @@ export default {
                         goodsInfo.discountPrice > 0
                             ? goodsInfo.discountPrice
                             : goodsInfo.originalPrice;
-                    let sku = JSON.parse(goodsInfo.sku);
+                    let sku = JSON.parse(goodsInfo.specList);
                     for (let i in sku) {
                         let attrKeyIndexOf = i.indexOf(",");
                         let attrKeyObj = {};
@@ -303,8 +312,10 @@ export default {
                     this.getAddressList();
                 })
                 .catch((err) => {
+                    console.log(err);
                     this.$toast(err.message);
                 });
+            this.hasCollectGoods();
         },
         //选中规格
         selectSku(
@@ -457,7 +468,31 @@ export default {
                     this.$toast(err.message);
                 });
         },
-        buy() {},
+        buy() {
+            if (this.selectedSku.includes(null)) {
+                this.$toast("请选择全部规格");
+                return false;
+            }
+            let list = [];
+            let obj = {
+                goodsId: this.goodsId,
+                cover: this.cover,
+                mainTitle: this.mainTitle,
+                selectedSkuText: this.selectedSkuText,
+                skuStock: this.skuStock,
+                skuPrice: this.skuPrice,
+                skuCover: this.skuCover,
+                numberOfpurchases: this.numberOfpurchases,
+                goodsSpecsId: this.currentSkuInfo.id,
+            };
+            list.push(obj);
+            this.$router.push({
+                path: "/OrderDetail",
+                query: {
+                    data: JSON.stringify(list),
+                },
+            });
+        },
         toAddressList() {
             this.$router.push({
                 path: "/AddressList",
@@ -467,14 +502,40 @@ export default {
             get(api.getAddressList)
                 .then((res) => {
                     let data = res.data.data;
-                    let selectAddress = this.$globalVariable.address;
+                    let temporaryAddress = JSON.parse(
+                        localStorage.getItem("temporaryAddress")
+                    );
                     this.address =
-                        JSON.stringify(selectAddress) != "{}"
-                            ? selectAddress
-                            : data[0];
-                    this.$globalVariable.address = {};
+                        temporaryAddress != null ? temporaryAddress : data[0];
                 })
                 .catch((err) => {});
+        },
+        toCart() {
+            this.$router.push({
+                path: "/Cart",
+            });
+        },
+        hasCollectGoods() {
+            let params = this.$qs.stringify({
+                goodsId: this.goodsId,
+            });
+            post(api.hasCollectGoods, params).then((res) => {
+                let data = res.data;
+                this.isCollect = data.code == 0;
+            });
+        },
+        collectGoods() {
+            let params = this.$qs.stringify({
+                goodsId: this.goodsId,
+            });
+            post(api.addOrDelCollectGoods, params)
+                .then((res) => {
+                    let data = res.data;
+                    if (data.code == 0) this.isCollect = !this.isCollect;
+                })
+                .catch((err) => {
+                    this.$toast(err.message);
+                });
         },
     },
     computed: {

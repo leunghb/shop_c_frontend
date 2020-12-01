@@ -16,6 +16,8 @@ Vue.prototype.$globalVariable = globalVariable;
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
+    let href = window.location.href;
+    if (href.indexOf("GoodsDetail") == -1 && href.indexOf("OrderDetail") == -1 && href.indexOf("AddressList") == -1) localStorage.removeItem("temporaryAddress");
     next();
 })
 

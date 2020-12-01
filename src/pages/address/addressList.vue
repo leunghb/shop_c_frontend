@@ -70,7 +70,7 @@ export default {
             });
         },
         selectAddress(item) {
-            this.$globalVariable.address = item;
+            localStorage.setItem("temporaryAddress", JSON.stringify(item));
             this.$toast("已选择" + item.name + "-" + item.address + "做为地址");
             let time = setTimeout(() => {
                 this.$router.go(-1);

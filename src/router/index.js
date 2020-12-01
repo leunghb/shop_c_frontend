@@ -92,6 +92,14 @@ export default new Router({
             meta: {
                 keepAlive: false,
             }
+        },
+        {
+            path: '/OrderDetail',
+            name: 'OrderDetail',
+            component: () => import('@/pages/order/orderDetail'),
+            meta: {
+                keepAlive: false,
+            }
         }
     ]
 })
