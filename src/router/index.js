@@ -92,11 +92,17 @@ export default new Router({
             meta: {
                 keepAlive: false,
             }
-        },
-        {
+        }, {
             path: '/OrderDetail',
             name: 'OrderDetail',
             component: () => import('@/pages/order/orderDetail'),
+            meta: {
+                keepAlive: false,
+            }
+        }, {
+            path: '/Pay',
+            name: 'Pay',
+            component: () => import('@/pages/pay/pay'),
             meta: {
                 keepAlive: false,
             }

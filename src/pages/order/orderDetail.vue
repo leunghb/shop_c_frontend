@@ -1,6 +1,6 @@
 <template>
     <div class="orderDetail fullscreen">
-        <Back></Back>
+        <Back :headerTitle="'确认订单'"></Back>
 
         <van-address-list
             class="address"
@@ -78,21 +78,27 @@ export default {
             });
         },
         onSubmit() {
-            let cartId = "";
-            this.list.forEach((v) => {
-                console.log(v);
-                cartId += v.cartId + ",";
+            let list = this.list;
+            list.forEach((v) => {
+                v.cover = v.cover.replace(api.baseUrl, "");
+                v.skuCover = v.cover;
             });
-            cartId = cartId.substring(0, cartId.length - 1);
             let params = this.$qs.stringify({
                 addressId: this.address[0].id,
                 totalPrice: this.totalPrice,
-                info: cartId,
+                info: JSON.stringify(list),
             });
             post(api.addOrder, params)
                 .then((res) => {
                     let data = res.data;
-                    console.log(data);
+                    if (data.code == 0) {
+                        this.$router.push({
+                            path: "/Pay",
+                            query: {
+                                orderId: data.data.orderId,
+                            },
+                        });
+                    }
                 })
                 .catch((err) => {
                     this.$toast(err.message);

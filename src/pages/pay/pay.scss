@@ -1,0 +1,46 @@
+.pay {
+    .payType {
+        position: relative;
+        margin-top: 60px;
+        .item {
+            position: relative;
+            margin-left: 15px;
+            padding: 20px 15px;
+            width: calc(100% - 30px);
+            background-color: #f5f5f5;
+            box-sizing: border-box;
+            border-radius: 10px;
+            .label {
+                display: inline;
+                font-size: 14px;
+                line-height: 14px;
+            }
+            .checked {
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                margin-top: -5px;
+                height: 10px;
+                width: 10px;
+                background-color: #3391c9;
+                border-radius: 5px;
+            }
+        }
+    }
+    .submit {
+        position: fixed;
+        bottom: 15px;
+        left: 15px;
+        width: calc(100% - 30px);
+        height: 40px;
+        background-color: #3391c9;
+        border-radius: 5px;
+        color: #fff;
+        line-height: 40px;
+        text-align: center;
+        font-size: 14px;
+    }
+    >>>.van-loading__text {
+        color: #fff;
+    }
+}

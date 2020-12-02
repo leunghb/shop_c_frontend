@@ -137,6 +137,10 @@ export default {
                     list.push(obj);
                 }
             });
+            if (list.length == 0) {
+                this.$toast("未选择商品");
+                return false;
+            }
             this.$router.push({
                 path: "/OrderDetail",
                 query: {
