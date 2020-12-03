@@ -35,6 +35,16 @@
                     margin-top: 5px;
                 }
             }
+            .noneStock {
+                position: absolute;
+                right: 0;
+                bottom: 10px;
+                font-size: 14px;
+                line-height: 14px;
+            }
+        }
+        .disabled {
+            opacity: .6;
         }
     }
     .submitBar {

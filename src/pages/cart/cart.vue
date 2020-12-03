@@ -7,13 +7,18 @@
             :finished-text="finishedText"
             @load="onLoad"
         >
-            <van-cell v-for="(item, index) in list" :key="item.id">
+            <van-cell
+                :class="[item.stock == 0 ? 'disabled' : '']"
+                v-for="(item, index) in list"
+                :key="item.id"
+            >
                 <van-swipe-cell>
                     <van-checkbox
                         class="checkbox"
                         name="item"
                         v-model="item.checked"
                         @click="singleCheck(index)"
+                        :disabled="item.stock == 0"
                     ></van-checkbox>
                     <van-card
                         :price="item.price.toFixed(2)"
@@ -23,12 +28,14 @@
                         :thumb="item.cover"
                     />
                     <van-stepper
+                        v-if="item.stock > 0"
                         class="number"
                         v-model="item.number"
                         min="1"
                         :max="item.stock"
                         integer
                     />
+                    <div v-else class="noneStock">暂无库存</div>
                     <template #right>
                         <van-button
                             square
@@ -74,7 +81,9 @@ export default {
             totalPrice: 0,
         };
     },
-    created() {},
+    created() {
+        localStorage.setItem("paySuccessBackLevel", -2);
+    },
     methods: {
         scrollTop() {},
         onLoad() {
@@ -83,6 +92,7 @@ export default {
                 limit: this.limit,
                 page: this.page,
             });
+            // cart.number == 0 不返回
             post(api.getCartList, params)
                 .then((res) => {
                     let data = res.data;
@@ -94,12 +104,14 @@ export default {
                     if (data.code == 0) {
                         let arr = [];
                         data.data.forEach((v) => {
-                            v.checked = false;
+                            v.checked = v.stock == 0 ? null : false;
                             v.cover =
                                 v.skuCover != "" ? v.skuCover : v.cover[0];
                             v.cover = api.baseUrl + v.cover;
                             arr.push(v);
-                            this.listCheckedStatus.push(false);
+                            this.listCheckedStatus.push(
+                                v.stock == 0 ? null : false
+                            );
                         });
                         this.list = arr;
                         this.loading = false;
@@ -145,20 +157,24 @@ export default {
                 path: "/OrderDetail",
                 query: {
                     data: JSON.stringify(list),
+                    type: 1, //购物车下单
                 },
             });
         },
         checkAll() {
             let hasUnselected = this.listCheckedStatus.includes(false);
             this.list.forEach((v, k) => {
-                v.checked = hasUnselected ? true : false;
-                this.$set(this.listCheckedStatus, k, v.checked);
+                if (v.checked != null) {
+                    v.checked = hasUnselected ? true : false;
+                    this.$set(this.listCheckedStatus, k, v.checked);
+                }
             });
             if (!this.listCheckedStatus.includes(false)) {
                 this.allChecked = true;
             }
         },
         singleCheck(index) {
+            if (this.list[index].stock == 0) return false;
             this.$set(
                 this.listCheckedStatus,
                 index,
@@ -166,6 +182,9 @@ export default {
             );
             if (!this.listCheckedStatus.includes(false)) {
                 this.allChecked = true;
+            }
+            if (!this.listCheckedStatus.includes(true)) {
+                this.allChecked = false;
             }
         },
         del(index, item) {

@@ -163,7 +163,7 @@
 
         <div class="footer">
             <div class="left">
-                <van-icon name="cart-o" @click="toCart" />
+                <van-icon name="cart-o" @click="toCart"/>
                 <van-icon
                     :name="isCollect ? 'goods-collect' : 'goods-collect-o'"
                     @click="collectGoods"
@@ -228,6 +228,7 @@ export default {
         Back,
     },
     created() {
+        localStorage.setItem("paySuccessBackLevel", -2);
         let query = this.$route.query;
         this.goodsId = query.goodsId;
         this.getGoodsDetail();
@@ -442,6 +443,10 @@ export default {
             }
         },
         addGoodsToCart() {
+            if (this.skuStock == 0) {
+                this.$toast("暂无库存");
+                return false;
+            }
             let skuCover = this.skuCover.replace(api.baseUrl, "");
             let currentSkuInfo = this.currentSkuInfo;
             let params = this.$qs.stringify({
@@ -454,7 +459,6 @@ export default {
             post(api.addGoodsToCart, params)
                 .then((res) => {
                     let data = res.data;
-                    console.log(data);
                     if (data.code == 0) {
                         this.showCartAnimation = true;
                         let time = setTimeout(() => {
@@ -473,10 +477,14 @@ export default {
                 this.$toast("请选择全部规格");
                 return false;
             }
+            if (this.skuStock == 0) {
+                this.$toast("暂无库存");
+                return false;
+            }
             let list = [];
             let obj = {
                 goodsId: this.goodsId,
-                cover: this.cover,
+                cover: this.cover[0],
                 mainTitle: this.mainTitle,
                 selectedSkuText: this.selectedSkuText,
                 skuStock: this.skuStock,
@@ -490,6 +498,7 @@ export default {
                 path: "/OrderDetail",
                 query: {
                     data: JSON.stringify(list),
+                    type: 0, //直接下单
                 },
             });
         },

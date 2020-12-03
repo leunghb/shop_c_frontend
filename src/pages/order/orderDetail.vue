@@ -87,6 +87,7 @@ export default {
                 addressId: this.address[0].id,
                 totalPrice: this.totalPrice,
                 info: JSON.stringify(list),
+                type: this.$route.query.type,
             });
             post(api.addOrder, params)
                 .then((res) => {

@@ -51,15 +51,29 @@ export default {
             });
         },
         submit() {
+            this.duringThePayment = true;
             let orderId = this.$route.query.orderId;
             let params = this.$qs.stringify({
                 orderId: orderId,
             });
             post(api.pay, params)
                 .then((res) => {
-                    console.log(res);
+                    let data = res.data;
+                    if (data.code == 0) {
+                        this.$toast("支付成功");
+                        this.getUserBalance();
+                        let time = setTimeout(() => {
+                            this.$router.go(
+                                localStorage.getItem("paySuccessBackLevel")
+                            );
+                            clearTimeout(time);
+                        }, 1200);
+                        return false;
+                    }
+                    this.duringThePayment = false;
                 })
                 .catch((err) => {
+                    this.duringThePayment = false;
                     this.$toast(err.message);
                 });
         },

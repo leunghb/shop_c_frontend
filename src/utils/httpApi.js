@@ -28,12 +28,13 @@ if (ENV == "development") {
 if (ENV == "production") {
     url = process.env.PROD_API_URL;
 }
-let user = "/user/", goods = "/goods/", cart = "/cart/", order = "/order/";
+let user = "/user/", goods = "/goods/", cart = "/cart/", order = "/order/", upload = "/upload/";
 export const api = {
     baseUrl: url,
     // 用户
     getAllUser: url + user + "getAllUser", //所有用户
     getUserByAccount: url + user + "getUserByAccount", //通过账号获取用户
+    getUserInfo: url + user + "getUserInfo", //获取用户信息
     sendVerifyCode: url + user + "sendVerifyCode", //发送验证码
     register: url + user + "register", //注册
     login: url + user + "login", //登录
@@ -44,6 +45,7 @@ export const api = {
     addOrPutAddress: url + user + "addOrPutAddress", //添加或更新用户地址
     delAddress: url + user + "delAddress", //删除地址
     pay: url + user + "pay", //支付
+    putUserAvatarOrName: url + user + "putUserAvatarOrName", //更新用户头像
 
     // 商品
     getGoodsType: url + goods + "getGoodsType", //商品分类
@@ -60,6 +62,9 @@ export const api = {
 
     // 订单
     addOrder: url + order + "addOrder", //生成订单
+
+    // 上传
+    uploadSinglePicture: url + upload + "uploadSinglePicture", //上传单张图片
 }
 
 export function get(url, params) {

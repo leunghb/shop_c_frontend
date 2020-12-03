@@ -27,3 +27,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 # localStorage
     temporaryAddress 临时地址
+    paySuccessBackLevel 支付成功返回层级 router.go(paySuccessBackLevel)
