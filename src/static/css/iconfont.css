@@ -10,7 +10,23 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.iconfenlei:before {
+.iconpingjiaguanli:before {
+    content: "\e63c";
+  }
+  
+  .iconyue:before {
+    content: "\e614";
+  }
+  
+  .iconshoucang:before {
+    content: "\e603";
+  }
+  
+  .icondingdanyichenggong:before {
+    content: "\e899";
+  }
+  
+  .iconfenlei:before {
     content: "\e623";
   }
   

@@ -106,6 +106,13 @@ export default new Router({
             meta: {
                 keepAlive: false,
             }
+        }, {
+            path: '/Balance',
+            name: 'Balance',
+            component: () => import('@/pages/balance/balance'),
+            meta: {
+                keepAlive: false,
+            }
         }
     ]
 })

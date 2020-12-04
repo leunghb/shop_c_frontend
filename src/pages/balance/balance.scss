@@ -1,0 +1,46 @@
+.balance {
+    .back {
+        background-color: #fff;
+        z-index: 999;
+    }
+    .info {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 180px;
+        .icon,.number {
+            margin-left: -15px;
+            width: 50px;
+        }
+        .number {
+            margin-left: 15px;
+            font-size: 30px;
+            color: #3B73C6;
+        }
+    }
+    .list {
+        padding-bottom: 15px;
+        width: 100%;
+        .item {
+            margin-bottom: 15px;
+            margin-left: 15px;
+            padding: 0 15px;
+            height: 40px;
+            width: calc(100% - 30px);
+            background-color: #eee;
+            line-height: 40px;
+            border-radius: 6px;
+            box-sizing: border-box;
+            .useAmount {
+                float: left;
+            }
+            .time {
+                float: right;
+            }
+        }
+        .item:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
