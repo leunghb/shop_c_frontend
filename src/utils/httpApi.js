@@ -62,6 +62,8 @@ export const api = {
 
     // 订单
     addOrder: url + order + "addOrder", //生成订单
+    getOrderList: url + order + "getOrderList", //订单列表
+    getOrderDetail: url + order + "getOrderDetail", //订单详情
 
     // 上传
     uploadSinglePicture: url + upload + "uploadSinglePicture", //上传单张图片

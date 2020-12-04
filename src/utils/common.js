@@ -148,3 +148,8 @@ export function arrayEquals(value1 = [], value2 = []) {
 function copy(value) {
     return JSON.parse(JSON.stringify(value));
 }
+
+//补零
+export function padNumber(num, length) {
+    return (num / Math.pow(10, length)).toFixed(length).substr(2);
+}

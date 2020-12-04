@@ -495,7 +495,7 @@ export default {
             };
             list.push(obj);
             this.$router.push({
-                path: "/OrderDetail",
+                path: "/ConfirmOrder",
                 query: {
                     data: JSON.stringify(list),
                     type: 0, //直接下单

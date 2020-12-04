@@ -10,6 +10,7 @@
         <div class="list">
             <div class="item" v-for="(item, index) in list" :key="index">
                 <div class="useAmount" v-text="item.useAmount"></div>
+                <van-icon name="arrow" />
                 <div class="time" v-text="item.time"></div>
             </div>
         </div>
@@ -18,6 +19,7 @@
 
 <script>
 import Back from "../../components/backToPrevious/backToPrevious";
+import { padNumber } from "../../utils/common";
 import { api, get } from "../../utils/httpApi";
 
 export default {
@@ -40,6 +42,7 @@ export default {
                     let data = res.data.data;
                     data.forEach((v) => {
                         let time = new Date(v.createdAt);
+                        v.useAmount = v.useAmount.toFixed(2);
                         v.useAmount =
                             v.useType == 0
                                 ? "+" + v.useAmount
@@ -47,13 +50,13 @@ export default {
                         v.time =
                             time.getFullYear() +
                             "." +
-                            time.getMonth() +
+                            padNumber(time.getMonth(), 2) +
                             "." +
-                            time.getDate() +
+                            padNumber(time.getDate(), 2) +
                             " " +
-                            time.getHours() +
+                            padNumber(time.getHours(), 2) +
                             ":" +
-                            time.getSeconds();
+                            padNumber(time.getMinutes(), 2);
                     });
                     this.list = data;
                 })

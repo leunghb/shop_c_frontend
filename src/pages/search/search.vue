@@ -96,7 +96,7 @@ export default {
                 soldOut: 0,
                 mainTitle: this.searchValue,
             });
-            post(api.getGoods, params)
+            post(api.getGoodsList, params)
                 .then((res) => {
                     let data = res.data;
                     if (data.data.length == 0) {

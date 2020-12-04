@@ -93,9 +93,9 @@ export default new Router({
                 keepAlive: false,
             }
         }, {
-            path: '/OrderDetail',
-            name: 'OrderDetail',
-            component: () => import('@/pages/order/orderDetail'),
+            path: '/ConfirmOrder',
+            name: 'ConfirmOrder',
+            component: () => import('@/pages/confirmOrder/confirmOrder'),
             meta: {
                 keepAlive: false,
             }
@@ -110,6 +110,20 @@ export default new Router({
             path: '/Balance',
             name: 'Balance',
             component: () => import('@/pages/balance/balance'),
+            meta: {
+                keepAlive: false,
+            }
+        }, {
+            path: '/Order',
+            name: 'Order',
+            component: () => import('@/pages/order/order'),
+            meta: {
+                keepAlive: false,
+            }
+        }, {
+            path: '/OrderDetail',
+            name: 'OrderDetail',
+            component: () => import('@/pages/order/orderDetail'),
             meta: {
                 keepAlive: false,
             }

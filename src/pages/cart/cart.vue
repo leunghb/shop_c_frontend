@@ -154,7 +154,7 @@ export default {
                 return false;
             }
             this.$router.push({
-                path: "/OrderDetail",
+                path: "/ConfirmOrder",
                 query: {
                     data: JSON.stringify(list),
                     type: 1, //购物车下单

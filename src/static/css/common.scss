@@ -19,3 +19,7 @@
 .clearBoth {
     clear: both;
 }
+
+[v-cloak] {
+    display: none;
+}
