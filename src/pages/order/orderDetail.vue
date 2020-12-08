@@ -1,6 +1,6 @@
 <template>
     <div class="orderDetail fullscreen">
-        <Back :headerTitle="'订单详情'"></Back>
+        <Back :headerTitle="info.orderStatusText"></Back>
 
         <div class="countdown" v-if="info.orderStatus < 2 && countdown != 0">
             <span>订单于</span>
@@ -41,15 +41,22 @@
 
         <van-submit-bar
             :price="totalPrice * 100"
-            button-text="提交订单"
+            button-text="支付"
             @submit="onSubmit"
-        />
+        >
+            <div
+                class="refunds"
+                v-text="info.orderStatus == 1 ? '退货退款' : ''"
+            ></div>
+            <div class="comment">评论</div>
+        </van-submit-bar>
     </div>
 </template>
 
 <script>
 import Back from "../../components/backToPrevious/backToPrevious";
 import { api, post } from "../../utils/httpApi";
+import { orderStatusText } from "../../utils/common";
 
 export default {
     data() {
@@ -83,6 +90,9 @@ export default {
                     let dataa = res.data;
                     if (dataa.code == 0) {
                         let data = dataa.data;
+                        console.log(data);
+                        data.orderStatusText =
+                            "订单" + orderStatusText(data.orderStatus);
                         this.info = data;
 
                         let countdown = null;
@@ -160,13 +170,7 @@ export default {
                 .then((res) => {
                     let data = res.data;
                     if (data.code == 0) {
-                        this.info.orderStatus =
-                            this.info.orderStatus == 0 ? 3 : 2;
-                        this.$toast(
-                            this.info.orderStatus == 0
-                                ? "订单已自动取消"
-                                : "订单已自动关闭"
-                        );
+                        this.$router.go(0);
                         return false;
                     }
                 })
@@ -180,7 +184,15 @@ export default {
                 path: "/AddressList",
             });
         },
-        onSubmit() {},
+        onSubmit() {
+            this.$router.push({
+                path: "/Pay",
+                query: {
+                    orderId: this.info.orderId,
+                    addressId: this.address[0].id,
+                },
+            });
+        },
     },
 };
 </script>

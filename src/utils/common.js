@@ -153,3 +153,35 @@ function copy(value) {
 export function padNumber(num, length) {
     return (num / Math.pow(10, length)).toFixed(length).substr(2);
 }
+
+//订单状态
+export function orderStatusText(orderStatus) {
+    let text = "";
+    switch (orderStatus) {
+        case 0:
+            text = "未支付";
+            break;
+        case 1:
+            text = "已支付";
+            break;
+        case 2:
+            text = "交易完成";
+            break;
+        case 3:
+            text = "已取消";
+            break;
+        case 4:
+            text = "退款中";
+            break;
+        case 5:
+            text = "退货退款中";
+            break;
+        case 6:
+            text = "已退款";
+            break;
+        case 7:
+            text = "已退货退款";
+            break;
+    }
+    return text;
+}

@@ -45,8 +45,8 @@ export default {
                         v.useAmount = v.useAmount.toFixed(2);
                         v.useAmount =
                             v.useType == 0
-                                ? "+" + v.useAmount
-                                : "-" + v.useAmount;
+                                ? "+￥" + v.useAmount
+                                : "-￥" + v.useAmount;
                         v.time =
                             time.getFullYear() +
                             "." +

@@ -52,9 +52,12 @@ export default {
         },
         submit() {
             this.duringThePayment = true;
-            let orderId = this.$route.query.orderId;
+            let query = this.$route.query;
+            let orderId = query.orderId,
+                addressId = query.addressId;
             let params = this.$qs.stringify({
                 orderId: orderId,
+                addressId: addressId,
             });
             post(api.pay, params)
                 .then((res) => {

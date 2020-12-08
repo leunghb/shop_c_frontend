@@ -42,7 +42,7 @@
 
 <script>
 import Back from "../../components/backToPrevious/backToPrevious";
-import { padNumber } from "../../utils/common";
+import { orderStatusText, padNumber } from "../../utils/common";
 import { post, api } from "../../utils/httpApi";
 
 export default {
@@ -66,10 +66,17 @@ export default {
                     name: "已完成",
                     orderStatus: 2,
                 },
+                {
+                    name: "退货/退款中",
+                    orderStatus: 3,
+                },
+                {
+                    name: "已退货/退款",
+                    orderStatus: 4,
+                },
             ],
             list: [],
             isLoad: false,
-            orderStatusText: ["未支付", "已支付", "交易完成", "已取消"],
         };
     },
     components: { Back },
@@ -104,7 +111,7 @@ export default {
                             ":" +
                             padNumber(time.getSeconds(), 2);
                         v.info = JSON.parse(v.info);
-                        v.orderStatusText = this.orderStatusText[v.orderStatus];
+                        v.orderStatusText = orderStatusText(v.orderStatus);
                         v.info.forEach((infoV) => {
                             infoV.cover = api.baseUrl + infoV.cover;
                             infoV.skuCover = infoV.cover;
