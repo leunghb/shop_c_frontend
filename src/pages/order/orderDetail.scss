@@ -1,0 +1,65 @@
+.orderDetail {
+    padding-top: 45px;
+    box-sizing: border-box;
+    .back {
+        background-color: #fff;
+        z-index: 999;
+    }
+    .countdown {
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        font-size: 14px;
+        .van-count-down {
+            display: inline;
+        }
+        border-bottom: 1px solid rgb(247, 247, 247);
+    }
+    .address {
+        padding: 0 15px;
+        width: 100%;
+        height: initial;
+        border-bottom: 1px solid rgb(247, 247, 247);
+    }
+    .disabledAddress {
+        opacity: .6;
+    }
+    >>>.van-radio__icon, .van-address-list__bottom {
+        display: none;
+    }
+    >>>.van-tag--danger {
+        background-color: #3391c9;
+        border: none;
+    }
+
+    .list {
+        margin-top: 15px;
+        margin-left: 15px;
+        padding-bottom: 60px;
+        width: calc(100% - 30px);
+        background-color: #fff;
+        .van-card {
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #f5f5f5;
+        }
+    }
+    >>>.van-card__title {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+    >>>.van-card__price {
+        float: left;
+    }
+    >>>.van-card__num {
+        margin-left: 10px;
+        float: left;
+        line-height: 22px;
+    }
+    >>>.van-card__footer {
+        position: absolute;
+        right: 15px;
+        bottom: 10px;
+    }
+}

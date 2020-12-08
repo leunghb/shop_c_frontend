@@ -118,7 +118,7 @@ export default new Router({
             name: 'Order',
             component: () => import('@/pages/order/order'),
             meta: {
-                keepAlive: false,
+                keepAlive: true,
             }
         }, {
             path: '/OrderDetail',

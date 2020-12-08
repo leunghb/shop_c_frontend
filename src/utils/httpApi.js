@@ -41,10 +41,10 @@ export const api = {
     forgetPwd: url + user + "updatePwd",//修改密码
     getUserBalanceRecord: url + user + "getUserBalanceRecord", //用户余额使用记录
     getUserBalance: url + user + "getUserBalance", //获取用户余额
-    getAddressList: url + user + "getAddressList", //获取用户地址
+    getAddressList: url + user + "getAddressList", //获取用户地址列表
+    getAddress: url + user + "getAddress", //获取单个地址
     addOrPutAddress: url + user + "addOrPutAddress", //添加或更新用户地址
     delAddress: url + user + "delAddress", //删除地址
-    pay: url + user + "pay", //支付
     putUserAvatarOrName: url + user + "putUserAvatarOrName", //更新用户头像
 
     // 商品
@@ -64,6 +64,9 @@ export const api = {
     addOrder: url + order + "addOrder", //生成订单
     getOrderList: url + order + "getOrderList", //订单列表
     getOrderDetail: url + order + "getOrderDetail", //订单详情
+    pay: url + order + "pay", //支付
+    cancelOrder: url + order + "putOrderStatus/cancelOrder", //取消订单
+    closeOrder: url + order + "putOrderStatus/closeOrder", //关闭订单
 
     // 上传
     uploadSinglePicture: url + upload + "uploadSinglePicture", //上传单张图片

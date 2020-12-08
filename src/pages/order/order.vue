@@ -1,7 +1,12 @@
 <template>
     <div class="order fullscreen">
         <Back :headerTitle="'订单'"></Back>
-        <van-tabs class="tabs" :ellipsis="false" @click="selTab">
+        <van-tabs
+            class="tabs"
+            :ellipsis="false"
+            v-model="currentTab"
+            @click="selTab"
+        >
             <van-tab
                 v-for="(item, index) in tabs"
                 :title="item.name"
@@ -43,6 +48,7 @@ import { post, api } from "../../utils/httpApi";
 export default {
     data() {
         return {
+            currentTab: 0,
             tabs: [
                 {
                     name: "全部",
@@ -117,6 +123,26 @@ export default {
                 },
             });
         },
+    },
+    beforeRouteEnter(to, from, next) {
+        if (to.name == "Order" && from.name == "My") {
+            to.meta.isNeetRefresh = true;
+        }
+        next();
+    },
+    activated() {
+        if (this.$route.meta.isNeetRefresh) {
+            this.currentTab = 0;
+            this.list = [];
+            this.getOrderList();
+        }
+    },
+    beforeRouteLeave(to, from, next) {
+        from.meta.isNeetRefresh = false;
+        if (to.name == "My") {
+            this.isLoad = false;
+        }
+        next();
     },
 };
 </script>
