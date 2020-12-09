@@ -18,9 +18,9 @@
         <div class="list">
             <div
                 class="item"
-                v-for="item in list"
+                v-for="(item, index) in list"
                 :key="item.id"
-                @click="toOrderDetail(item.orderId)"
+                @click="toOrderDetail(item.orderId, index)"
             >
                 <div class="time" v-text="item.time"></div>
                 <div class="orderStatus" v-text="item.orderStatusText"></div>
@@ -122,11 +122,12 @@ export default {
                 this.isLoad = true;
             });
         },
-        toOrderDetail(orderId) {
+        toOrderDetail(orderId, index) {
             this.$router.push({
                 path: "/OrderDetail",
                 query: {
                     orderId: orderId,
+                    index: index,
                 },
             });
         },
@@ -138,6 +139,21 @@ export default {
         next();
     },
     activated() {
+        let changeOrderListOrderStatus = JSON.parse(
+            localStorage.getItem("changeOrderListOrderStatus")
+        );
+        localStorage.removeItem("changeOrderListOrderStatus");
+        if (
+            changeOrderListOrderStatus != null &&
+            this.list != undefined &&
+            this.list.length != 0
+        ) {
+            let index = changeOrderListOrderStatus.index;
+            let orderStatus = changeOrderListOrderStatus.orderStatus;
+            this.list[index].orderStatus = orderStatus;
+            this.list[index].orderStatusText = orderStatusText(orderStatus);
+        }
+
         if (this.$route.meta.isNeetRefresh) {
             this.currentTab = 0;
             this.list = [];

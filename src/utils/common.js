@@ -43,11 +43,6 @@ export function getCookie(c_name) {
     }
     return ""
 }
-//补零
-export function append_zero(obj) {
-    if (obj < 10) return '0' + '' + obj;
-    else return obj;
-}
 //uuid
 export function uuid() {
     let s = [];

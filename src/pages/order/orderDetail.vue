@@ -2,14 +2,20 @@
     <div class="orderDetail fullscreen">
         <Back :headerTitle="info.orderStatusText"></Back>
 
-        <div class="countdown" v-if="info.orderStatus < 2 && countdown != 0">
+        <div
+            class="countdown"
+            v-if="info.orderStatus < 2 && countdown != 0"
+            v-cloak
+        >
             <span>订单于</span>
             <van-count-down
                 :time="countdown"
                 format="HH 时 mm 分 ss 秒"
                 @finish="countdownFinish"
             />
-            <span>后自动{{ info.orderStatus == 0 ? "取消" : "关闭" }}</span>
+            <span
+                >后自动{{ info.orderStatus == 0 ? "取消" : "收货并关闭" }}</span
+            >
         </div>
 
         <van-address-list
@@ -44,12 +50,21 @@
             button-text="支付"
             @submit="onSubmit"
         >
-            <div
-                class="refunds"
-                v-text="info.orderStatus == 1 ? '退货退款' : ''"
-            ></div>
-            <div class="comment">评论</div>
+            <i
+                v-if="info.orderStatus != 3"
+                class="operate iconfont iconfenlei"
+                @click="showOperate = true"
+            ></i>
         </van-submit-bar>
+
+        <van-action-sheet
+            class="operateSheet"
+            :actions="_operateActions"
+            v-model="showOperate"
+            title="订单操作"
+            @select="operateSelect"
+        >
+        </van-action-sheet>
     </div>
 </template>
 
@@ -71,12 +86,25 @@ export default {
             goodsList: [],
 
             totalPrice: 0,
+
+            showOperate: false,
+            operateActions: [
+                { name: "取消订单", id: 0 },
+                { name: "确认收货", id: 1 },
+                { name: "退款", id: 2 },
+                { name: "退货退款", id: 3 },
+                { name: "评价", id: 4 },
+                { name: "退款详情", id: 5 },
+                { name: "退货退款详情", id: 6 },
+                { name: "评价详情", id: 7 },
+            ],
         };
     },
     components: {
         Back,
     },
     created() {
+        localStorage.setItem("paySuccessBackLevel", -1);
         this.getOrderDetail();
     },
     methods: {
@@ -90,7 +118,6 @@ export default {
                     let dataa = res.data;
                     if (dataa.code == 0) {
                         let data = dataa.data;
-                        console.log(data);
                         data.orderStatusText =
                             "订单" + orderStatusText(data.orderStatus);
                         this.info = data;
@@ -150,6 +177,8 @@ export default {
                                     ".van-submit-bar__button"
                                 ).style.display = "none";
                         });
+
+                        this.changeOrderListOrderStatus();
                         return false;
                     }
                     this.$toast(data.message);
@@ -159,18 +188,19 @@ export default {
                 });
         },
         countdownFinish() {
-            if (this.info.orderStatus > 1) return false;
+            let orderStatus = this.info.orderStatus;
+            if (orderStatus > 1) return false;
             let params = this.$qs.stringify({
                 orderId: this.info.orderId,
             });
-            post(
-                this.info.orderStatus == 0 ? api.cancelOrder : api.closeOrder,
-                params
-            )
+            post(orderStatus == 0 ? api.cancelOrder : api.closeOrder, params)
                 .then((res) => {
                     let data = res.data;
                     if (data.code == 0) {
-                        this.$router.go(0);
+                        this.info.orderStatus = orderStatus == 0 ? 3 : 2;
+                        this.info.orderStatusText =
+                            "订单" + orderStatusText(this.info.orderStatus);
+                        this.changeOrderListOrderStatus();
                         return false;
                     }
                 })
@@ -193,6 +223,54 @@ export default {
                 },
             });
         },
+        changeOrderListOrderStatus() {
+            let obj = {
+                index: parseInt(this.$route.query.index),
+                orderStatus: this.info.orderStatus,
+            };
+            localStorage.setItem(
+                "changeOrderListOrderStatus",
+                JSON.stringify(obj)
+            );
+        },
+        operateSelect(actions, index) {
+            let id = actions.id;
+            if (id == 0 || id == 1) {
+                this.countdownFinish();
+            }
+            if (id == 2 || id == 3 || id == 5 || id == 6) {
+                this.$router.push({
+                    path: "/Refunds",
+                });
+            }
+            this.showOperate = false;
+        },
+    },
+    computed: {
+        _operateActions() {
+            let operateActions = this.operateActions;
+            let orderStatus = this.info.orderStatus;
+            let arr = [];
+            switch (orderStatus) {
+                case 0:
+                    arr.push(operateActions[0]);
+                    break;
+                case 1:
+                    arr.push(operateActions[1]);
+                    arr.push(operateActions[2]);
+                    break;
+                case 2:
+                    arr.push(operateActions[3]);
+                    break;
+                case (4, 6):
+                    arr.push(operateActions[5]);
+                    break;
+                case (5, 7):
+                    arr.push(operateActions[6]);
+                    break;
+            }
+            return arr;
+        },
     },
 };
 </script>
@@ -200,4 +278,5 @@ export default {
 <style scoped lang="scss">
 @import "../../static/css/common.scss";
 @import "./orderDetail.scss";
+@import "../../static/css/iconfont.css";
 </style>

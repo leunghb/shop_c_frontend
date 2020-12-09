@@ -127,6 +127,13 @@ export default new Router({
             meta: {
                 keepAlive: false,
             }
+        }, {
+            path: '/Refunds',
+            name: 'Refunds',
+            component: () => import('@/pages/order/refunds'),
+            meta: {
+                keepAlive: false,
+            }
         }
     ]
 })

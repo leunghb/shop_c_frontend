@@ -62,15 +62,21 @@
         right: 15px;
         bottom: 10px;
     }
-    .van-submit-bar .refunds, 
-    .van-submit-bar .comment {
+    .van-submit-bar .operate {
         margin-right: 10px;
-        padding: 0 10px;
-        height: 30px;
-        line-height: 30px;
-        border-radius: 15px;
-        border: 1px solid #eee;
-        font-size: 12px;
-        color: rgb(114, 114, 114);
+        font-size: 30px;
+        color: rgb(172, 172, 172);
+    }
+    .operateSheet {
+        box-sizing: border-box;
+        .item {
+            display: inline-block;
+            margin-right: 15px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 14px;
+        }
     }
 }
