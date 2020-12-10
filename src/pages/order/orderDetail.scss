@@ -25,10 +25,10 @@
     .disabledAddress {
         opacity: .6;
     }
-    >>>.van-radio__icon, .van-address-list__bottom {
+    > > > .van-radio__icon, .van-address-list__bottom {
         display: none;
     }
-    >>>.van-tag--danger {
+    > > > .van-tag--danger {
         background-color: #3391c9;
         border: none;
     }
@@ -44,20 +44,26 @@
             border-radius: 10px;
             background-color: #f5f5f5;
         }
+        .payTime {
+            margin-top: 15px;
+            font-size: 10px;
+            line-height: 10px;
+            color: #acacac;
+        }
     }
-    >>>.van-card__title {
+    > > > .van-card__title {
         font-size: 16px;
         margin-bottom: 5px;
     }
-    >>>.van-card__price {
+    > > > .van-card__price {
         float: left;
     }
-    >>>.van-card__num {
+    > > > .van-card__num {
         margin-left: 10px;
         float: left;
         line-height: 22px;
     }
-    >>>.van-card__footer {
+    > > > .van-card__footer {
         position: absolute;
         right: 15px;
         bottom: 10px;

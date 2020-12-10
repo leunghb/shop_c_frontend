@@ -13,6 +13,7 @@ export function isEmail(str) {
     else
         return true;
 }
+
 //验证平台
 export function platformLimit() {
     let system = {};
@@ -30,6 +31,7 @@ export function platformLimit() {
     }
     return false;
 }
+
 //获取cookie
 export function getCookie(c_name) {
     if (document.cookie.length > 0) {
@@ -43,6 +45,7 @@ export function getCookie(c_name) {
     }
     return ""
 }
+
 //uuid
 export function uuid() {
     let s = [];
@@ -55,12 +58,14 @@ export function uuid() {
     s[8] = s[13] = s[18] = s[23] = '-';
     return (s.join('')).toUpperCase();
 }
+
 //转化时间
 export function conversion_time(time) {
     return time.getFullYear() + '-' + prefixInteger((time.getMonth() + 1), 2) + '-' +
         prefixInteger(time.getDate(), 2) +
         ' ' + prefixInteger(time.getHours(), 2) + ':' + prefixInteger(time.getMinutes(), 2);
 }
+
 //单条件排序
 export function sortByKey(array, key, sortBy) {
     return array.sort(function (a, b) {
@@ -73,6 +78,7 @@ export function sortByKey(array, key, sortBy) {
         }
     })
 }
+
 //多条件排序
 export function getSort(fn) {
     return function (a, b) {
@@ -87,6 +93,7 @@ export function getSort(fn) {
         return ret;
     }
 }
+
 export function getMutipSort(arr) {
     return function (a, b) {
         var tmp, i = 0;
@@ -124,6 +131,7 @@ export function isAllEqual(array) {
         return true;
     }
 }
+
 //两个数组是否相等
 export function arrayEquals(value1 = [], value2 = []) {
     let hash = copy(value2);
@@ -140,6 +148,7 @@ export function arrayEquals(value1 = [], value2 = []) {
     }
     return false;
 }
+
 function copy(value) {
     return JSON.parse(JSON.stringify(value));
 }
@@ -179,4 +188,25 @@ export function orderStatusText(orderStatus) {
             break;
     }
     return text;
+}
+
+//格式化时间
+export function formatDate(time, format = 'YY-MM-DD hh:mm:ss') {
+    let date = new Date(time);
+    let year = date.getFullYear(),
+        month = date.getMonth() + 1,//月份是从0开始的
+        day = date.getDate(),
+        hour = date.getHours(),
+        min = date.getMinutes(),
+        sec = date.getSeconds();
+    let preArr = Array.apply(null, Array(10)).map(function (elem, index) {
+        return '0' + index;
+    });
+    let newTime = format.replace(/YY/g, year)
+        .replace(/MM/g, preArr[month] || month)
+        .replace(/DD/g, preArr[day] || day)
+        .replace(/hh/g, preArr[hour] || hour)
+        .replace(/mm/g, preArr[min] || min)
+        .replace(/ss/g, preArr[sec] || sec);
+    return newTime;
 }

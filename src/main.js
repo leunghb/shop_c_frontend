@@ -6,10 +6,44 @@ import router from './router'
 import 'lib-flexible/flexible'
 import './utils/httpApi'
 import qs from 'qs'
-import { Toast, Icon, Swipe, SwipeItem, List, Cell, PullRefresh, Sticky, Lazyload, Sidebar, SidebarItem, Overlay, Search, Sku, Popup, Stepper, AddressList, Field, Switch, Dialog, SubmitBar, Checkbox, SwipeCell, Card, Button, CheckboxGroup, Loading, Tab, Tabs, CountDown, ActionSheet } from 'vant'
+import {
+    Toast,
+    Icon,
+    Swipe,
+    SwipeItem,
+    List,
+    Cell,
+    PullRefresh,
+    Sticky,
+    Lazyload,
+    Sidebar,
+    SidebarItem,
+    Overlay,
+    Search,
+    Sku,
+    Popup,
+    Stepper,
+    AddressList,
+    Field,
+    Switch,
+    Dialog,
+    SubmitBar,
+    Checkbox,
+    SwipeCell,
+    Card,
+    Button,
+    CheckboxGroup,
+    Loading,
+    Tab,
+    Tabs,
+    CountDown,
+    ActionSheet,
+    Uploader,
+    Picker
+} from 'vant'
 import globalVariable from './utils/globalVariable'
 
-Vue.use(Toast).use(Icon).use(Swipe).use(SwipeItem).use(List).use(Cell).use(PullRefresh).use(Sticky).use(Lazyload).use(Sidebar).use(SidebarItem).use(Overlay).use(Search).use(Sku).use(Popup).use(Stepper).use(AddressList).use(Field).use(Switch).use(Dialog).use(SubmitBar).use(Checkbox).use(SwipeCell).use(Card).use(Button).use(CheckboxGroup).use(Loading).use(Tab).use(Tabs).use(CountDown).use(ActionSheet);
+Vue.use(Toast).use(Icon).use(Swipe).use(SwipeItem).use(List).use(Cell).use(PullRefresh).use(Sticky).use(Lazyload).use(Sidebar).use(SidebarItem).use(Overlay).use(Search).use(Sku).use(Popup).use(Stepper).use(AddressList).use(Field).use(Switch).use(Dialog).use(SubmitBar).use(Checkbox).use(SwipeCell).use(Card).use(Button).use(CheckboxGroup).use(Loading).use(Tab).use(Tabs).use(CountDown).use(ActionSheet).use(Uploader).use(Picker);
 Vue.prototype.$qs = qs
 Vue.prototype.$globalVariable = globalVariable;
 
