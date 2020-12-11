@@ -90,13 +90,10 @@ export default {
         },
         selAvatar(e) {
             let files = e.target.files[0];
-            var params = new FormData();
+            let params = new FormData();
             params.append("file", files);
-            params.append("type", 0);
-            let config = {
-                headers: { "Content-Type": "multipart/form-data" },
-            };
-            post(api.uploadSinglePicture, params, config)
+            params.append("fileType", 0);
+            post(api.uploadSinglePicture, params)
                 .then((res) => {
                     let data = res.data;
                     if (data.code == 0) {

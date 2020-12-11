@@ -35,26 +35,32 @@
                 show-word-limit
                 onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"
         />
-        <van-field name="uploader" label="图片">
+        <van-field name="uploader" label="图片" v-if="orderStatus == 2 || orderStatus == 5 || orderStatus == 7">
             <template #input>
                 <van-uploader v-model="uploader" multiple :max-count="3"
                               :disabled="!(orderStatus == 1 || orderStatus == 2)"/>
             </template>
         </van-field>
-        <div class="submit">提交</div>
+
+        <div class="submit" @click="submit" v-if="orderStatus == 1 || orderStatus == 2">提交</div>
+        <div class="submit" @click="cancel" v-else>取消</div>
     </div>
 </template>
 
 <script>
     import Back from "../../components/backToPrevious/backToPrevious";
+    import {api, post} from "../../utils/httpApi";
 
     export default {
         data() {
             return {
                 headerTitle: "",
 
+                info: {},
+
                 orderStatus: null,
                 orderId: null,
+                type: null,
 
                 cause: '',
                 showPicker: false,
@@ -73,19 +79,108 @@
             this.orderId = query.orderId;
             switch (this.orderStatus) {
                 case 1:
+                case 4:
                     this.headerTitle = "申请退款";
+                    this.type = 0;
                     break;
                 case 2:
+                case 5:
                     this.headerTitle = "申请退货退款";
+                    this.type = 1;
                     break;
             }
+            this.getRefunds();
+            this.getOrderDetail();
         },
         methods: {
             onConfirm(val) {
                 this.cause = val;
-                console.log(this.cause);
                 this.showPicker = false;
             },
+            getRefunds() {
+                let params = this.$qs.stringify({
+                    orderId: this.orderId
+                })
+                post(api.getRefunds, params).then(res => {
+                    let data = res.data;
+                    if (data.code == 0) {
+                        let info = data.data;
+                        this.info = info;
+                        this.cause = info.cause;
+                        this.description = info.description;
+                        this.headerTitle += "中";
+                    }
+                }).catch(err => {
+                    this.$toast(err.message);
+                })
+            },
+            getOrderDetail() {
+                let params = this.$qs.stringify({
+                    orderId: this.orderId,
+                });
+                post(api.getOrderDetail, params)
+                    .then((res) => {
+                        let data = res.data;
+                        if (data.code == 0) {
+                            this.orderStatus = data.data.orderStatus;
+                            if (this.orderStatus != 1 && this.orderStatus != 2) document.querySelector(".van-field__word-limit").style.display = "none";
+                        }
+                    })
+                    .catch((err) => {
+                        this.$toast(err.message);
+                    });
+            },
+            submit() {
+                if (this.cause.length == 0) {
+                    this.$toast("请选择原因");
+                    return false;
+                }
+                let params = new FormData();
+                params.append("orderId", this.orderId);
+                params.append("type", this.type);
+                params.append("cause", this.cause);
+                if (this.description.length > 0) {
+                    params.append("description", this.description);
+                }
+                this.uploader.forEach(v => {
+                    params.append("file", v.file);
+                    params.append("fileType", 1);
+                })
+                post(api.addRefunds, params).then(res => {
+                    let data = res.data;
+                    if (data.code == 0) {
+                        this.$toast("申请成功");
+                        let time = setTimeout(() => {
+                            this.$router.go(0);
+                            clearTimeout(time);
+                        }, 1200)
+                        return false;
+                    }
+                    this.$toast("申请失败");
+                }).catch(err => {
+                    this.$toast(err.message);
+                })
+            },
+            cancel() {
+                let params = this.$qs.stringify({
+                    orderId: this.orderId,
+                    refundsType: this.type
+                })
+                post(api.cancelRefunds, params).then(res => {
+                    let data = res.data;
+                    if (data.code == 0) {
+                        this.$toast("取消成功");
+                        let time = setTimeout(() => {
+                            this.$router.go(0);
+                            clearTimeout(time);
+                        }, 1200)
+                        return false;
+                    }
+                    this.$toast("取消失败");
+                }).catch(err => {
+                    this.$toast(err.message);
+                })
+            }
         },
         computed: {
             columns() {

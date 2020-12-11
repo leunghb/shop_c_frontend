@@ -276,10 +276,12 @@
                     case 2:
                         arr.push(operateActions[3]);
                         break;
-                    case (4, 6):
+                    case 4:
+                    case 6:
                         arr.push(operateActions[5]);
                         break;
-                    case (5, 7):
+                    case 5:
+                    case 7:
                         arr.push(operateActions[6]);
                         break;
                 }

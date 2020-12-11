@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCookie } from "../utils/common"
+import {getCookie} from "../utils/common"
 
 axios.defaults.withCredentials = true; //让ajax携带cookie
 axios.defaults.timeout = 30000;
@@ -28,7 +28,7 @@ if (ENV == "development") {
 if (ENV == "production") {
     url = process.env.PROD_API_URL;
 }
-let user = "/user/", goods = "/goods/", cart = "/cart/", order = "/order/", upload = "/upload/";
+let user = "/user/", goods = "/goods/", cart = "/cart/", order = "/order/", upload = "/upload/", refunds = "/refunds/";
 export const api = {
     baseUrl: url,
     // 用户
@@ -68,8 +68,14 @@ export const api = {
     cancelOrder: url + order + "putOrderStatus/cancelOrder", //取消订单
     closeOrder: url + order + "putOrderStatus/closeOrder", //关闭订单
 
+    // 退货退款
+    addRefunds: url + refunds + "addRefunds", //生成记录
+    getRefunds: url + refunds + "getRefunds", //获取记录
+    cancelRefunds: url + refunds + "cancelRefunds", //取消
+
     // 上传
-    uploadSinglePicture: url + upload + "uploadSinglePicture", //上传单张图片
+    uploadSinglePicture:
+        url + upload + "uploadSinglePicture", //上传单张图片
 }
 
 export function get(url, params) {
