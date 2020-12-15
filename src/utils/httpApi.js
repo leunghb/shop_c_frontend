@@ -69,7 +69,8 @@ export const api = {
     closeOrder: url + order + "putOrderStatus/closeOrder", //关闭订单
     receivingOrder: url + order + "putOrderStatus/receivingOrder", //收货
     addEvaluate: url + order + "addEvaluate", //添加评价
-    selEvaluate: url + order + "selEvaluate", //获取订单商品的评论
+    selEvaluate: url + order + "getEvaluate", //获取订单商品的评论
+    selGoodsEvaluateList: url + order + "getGoodsEvaluateList", //获取商品的评论
 
     // 退货退款
     addRefunds: url + refunds + "addRefunds", //生成记录
