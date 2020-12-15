@@ -39,11 +39,12 @@ import {
     CountDown,
     ActionSheet,
     Uploader,
-    Picker
+    Picker,
+    Rate
 } from 'vant'
 import globalVariable from './utils/globalVariable'
 
-Vue.use(Toast).use(Icon).use(Swipe).use(SwipeItem).use(List).use(Cell).use(PullRefresh).use(Sticky).use(Lazyload).use(Sidebar).use(SidebarItem).use(Overlay).use(Search).use(Sku).use(Popup).use(Stepper).use(AddressList).use(Field).use(Switch).use(Dialog).use(SubmitBar).use(Checkbox).use(SwipeCell).use(Card).use(Button).use(CheckboxGroup).use(Loading).use(Tab).use(Tabs).use(CountDown).use(ActionSheet).use(Uploader).use(Picker);
+Vue.use(Toast).use(Icon).use(Swipe).use(SwipeItem).use(List).use(Cell).use(PullRefresh).use(Sticky).use(Lazyload).use(Sidebar).use(SidebarItem).use(Overlay).use(Search).use(Sku).use(Popup).use(Stepper).use(AddressList).use(Field).use(Switch).use(Dialog).use(SubmitBar).use(Checkbox).use(SwipeCell).use(Card).use(Button).use(CheckboxGroup).use(Loading).use(Tab).use(Tabs).use(CountDown).use(ActionSheet).use(Uploader).use(Picker).use(Rate);
 Vue.prototype.$qs = qs
 Vue.prototype.$globalVariable = globalVariable;
 

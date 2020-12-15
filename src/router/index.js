@@ -134,6 +134,13 @@ export default new Router({
             meta: {
                 keepAlive: false,
             }
+        }, {
+            path: '/Evaluate',
+            name: 'Evaluate',
+            component: () => import('@/pages/evaluate/evaluate'),
+            meta: {
+                keepAlive: false,
+            }
         }
     ]
 })

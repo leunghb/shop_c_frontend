@@ -43,6 +43,18 @@
             padding: 15px;
             border-radius: 10px;
             background-color: #f5f5f5;
+            .van-card__title {
+                width: 85%;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap
+            }
+            .evaluate {
+                position: absolute;
+                right: 0;
+                top: -78px;
+                font-size: 24px;
+            }
         }
         .payTime {
             margin-top: 15px;

@@ -4,7 +4,7 @@
 
         <div
                 class="countdown"
-                v-if="info.orderStatus < 2 && countdown != 0"
+                v-if="info.orderStatus <= 2 && countdown != 0"
                 v-cloak
         >
             <span>订单于</span>
@@ -46,6 +46,8 @@
                         v-text="item.skuPrice * item.numberOfpurchases"
                 ></span
                 >元
+                    <van-icon class="evaluate" name="comment-o" v-if="info.orderStatus == 2 || info.orderStatus == 8"
+                              @click="evaluate(item.goodsId, item.mainTitle, item.selectedSkuText, item.goodsSpecsId)"/>
                 </template>
             </van-card>
             <div class="payTime" v-if="info.payTimeText" v-text="'支付时间：'+info.payTimeText"></div>
@@ -254,6 +256,7 @@
                     index: parseInt(this.$route.query.index),
                     orderStatus: this.info.orderStatus,
                 };
+                console.log(obj);
                 localStorage.setItem(
                     "changeOrderListOrderStatus",
                     JSON.stringify(obj)
@@ -283,6 +286,18 @@
                 }
                 this.showOperate = false;
             },
+            evaluate(goodsId, goodsName, goodsSkuText, goodsSpecsId) {
+                this.$router.push({
+                    path: "/Evaluate",
+                    query: {
+                        orderId: this.info.orderId,
+                        goodsId: goodsId,
+                        goodsName: goodsName,
+                        goodsSkuText: goodsSkuText,
+                        goodsSpecsId: goodsSpecsId
+                    }
+                })
+            }
         },
         computed: {
             _operateActions() {
