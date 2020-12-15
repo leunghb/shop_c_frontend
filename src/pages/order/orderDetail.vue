@@ -14,7 +14,12 @@
                     @finish="countdownFinish"
             />
             <span
-            >后自动{{ info.orderStatus == 0 ? "取消" : "收货并关闭" }}</span
+            >
+                后自动
+                {{ info.orderStatus == 0 ? "取消" : "" }}
+                {{ info.orderStatus == 1 ? "收货" : "" }}
+                {{ info.orderStatus == 2 ? "关闭" : "" }}
+            </span
             >
         </div>
 
@@ -43,7 +48,10 @@
                 >元
                 </template>
             </van-card>
-            <div class="payTime" v-text="'支付时间：'+info.payTimeText"></div>
+            <div class="payTime" v-if="info.payTimeText" v-text="'支付时间：'+info.payTimeText"></div>
+            <div class="payTime" v-if="info.orderStatus == 4" v-text="'申请退款时间：'+ info.updatedAtText"></div>
+            <div class="payTime" v-if="info.orderStatus == 5" v-text="'申请退货退款时间：'+ info.updatedAtText"></div>
+            <div class="payTime" v-if="info.orderStatus == 3" v-text="'取消时间：'+ info.updatedAtText"></div>
         </div>
 
         <van-submit-bar
@@ -52,7 +60,7 @@
                 @submit="onSubmit"
         >
             <i
-                    v-if="info.orderStatus != 3"
+                    v-if="info.orderStatus != 3 && info.orderStatus != 8"
                     class="operate iconfont iconfenlei"
                     @click="showOperate = true"
             ></i>
@@ -119,7 +127,8 @@
                         let dataa = res.data;
                         if (dataa.code == 0) {
                             let data = dataa.data;
-                            data.payTimeText = data.payTime != null ? formatDate(new Date(data.payTime)) : "未知";
+                            data.payTimeText = data.payTime != null ? formatDate(new Date(data.payTime)) : "";
+                            data.updatedAtText = data.updatedAt != null ? formatDate(new Date(data.updatedAt)) : "未知";
                             data.orderStatusText =
                                 "订单" + orderStatusText(data.orderStatus);
                             this.info = data;
@@ -191,15 +200,30 @@
             },
             countdownFinish() {
                 let orderStatus = this.info.orderStatus;
-                if (orderStatus > 1) return false;
+                if (orderStatus > 2) return false;
                 let params = this.$qs.stringify({
                     orderId: this.info.orderId,
                 });
-                post(orderStatus == 0 ? api.cancelOrder : api.closeOrder, params)
+                let _api, _orderStatus;
+                switch (orderStatus) {
+                    case 0:
+                        break;
+                        _api = api.cancelRefunds;
+                        _orderStatus = 3;
+                    case 1:
+                        _api = api.receivingOrder;
+                        _orderStatus = 2;
+                        break;
+                    case 2:
+                        _api = api.closeOrder;
+                        _orderStatus = 8;
+                        break;
+                }
+                post(_api, params)
                     .then((res) => {
                         let data = res.data;
                         if (data.code == 0) {
-                            this.info.orderStatus = orderStatus == 0 ? 3 : 2;
+                            this.info.orderStatus = _orderStatus;
                             this.info.orderStatusText =
                                 "订单" + orderStatusText(this.info.orderStatus);
                             this.changeOrderListOrderStatus();

@@ -37,7 +37,7 @@
         />
         <van-field name="uploader" label="图片" v-if="orderStatus == 2 || orderStatus == 5 || orderStatus == 7">
             <template #input>
-                <van-uploader v-model="uploader" multiple :max-count="3"
+                <van-uploader v-model="uploader" multiple :max-count="3" :max-size="500 * 1024" @oversize="onOversize"
                               :disabled="!(orderStatus == 1 || orderStatus == 2)"/>
             </template>
         </van-field>
@@ -109,6 +109,10 @@
                         this.cause = info.cause;
                         this.description = info.description;
                         this.headerTitle += "中";
+                        let image = info.image.split(",");
+                        image.forEach(v => {
+                            this.uploader.push({url: api.baseUrl + v})
+                        })
                     }
                 }).catch(err => {
                     this.$toast(err.message);
@@ -151,7 +155,7 @@
                     if (data.code == 0) {
                         this.$toast("申请成功");
                         let time = setTimeout(() => {
-                            this.$router.go(0);
+                            this.$router.go(-1);
                             clearTimeout(time);
                         }, 1200)
                         return false;
@@ -162,25 +166,36 @@
                 })
             },
             cancel() {
-                let params = this.$qs.stringify({
-                    orderId: this.orderId,
-                    refundsType: this.type
+                let title = this.headerTitle + (this.orderStatus == 4 ? "取消将直接完成收货" : "取消将直接关闭订单");
+                this.$dialog.confirm({
+                    title: title,
                 })
-                post(api.cancelRefunds, params).then(res => {
-                    let data = res.data;
-                    if (data.code == 0) {
-                        this.$toast("取消成功");
-                        let time = setTimeout(() => {
-                            this.$router.go(0);
-                            clearTimeout(time);
-                        }, 1200)
-                        return false;
-                    }
-                    this.$toast("取消失败");
-                }).catch(err => {
-                    this.$toast(err.message);
-                })
-            }
+                    .then(() => {
+                        let params = this.$qs.stringify({
+                            orderId: this.orderId,
+                            refundsType: this.type
+                        })
+                        post(api.cancelRefunds, params).then(res => {
+                            let data = res.data;
+                            if (data.code == 0) {
+                                this.$toast("取消成功");
+                                let time = setTimeout(() => {
+                                    this.$router.go(-1);
+                                    clearTimeout(time);
+                                }, 1200)
+                                return false;
+                            }
+                            this.$toast("取消失败");
+                        }).catch(err => {
+                            this.$toast(err.message);
+                        })
+                    })
+                    .catch(() => {
+                    });
+            },
+            onOversize(file) {
+                this.$toast('文件大小不能超过 500kb');
+            },
         },
         computed: {
             columns() {

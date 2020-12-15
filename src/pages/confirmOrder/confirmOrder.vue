@@ -80,8 +80,8 @@ export default {
         onSubmit() {
             let list = this.list;
             list.forEach((v) => {
-                v.cover = v.cover.replace(api.baseUrl, "");
-                v.skuCover = v.cover;
+                v.skuCover = v.skuCover.replace(api.baseUrl, "");
+                v.cover = v.skuCover;
             });
             let params = this.$qs.stringify({
                 addressId: this.address[0].id,

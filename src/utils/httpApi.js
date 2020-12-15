@@ -67,6 +67,7 @@ export const api = {
     pay: url + order + "pay", //支付
     cancelOrder: url + order + "putOrderStatus/cancelOrder", //取消订单
     closeOrder: url + order + "putOrderStatus/closeOrder", //关闭订单
+    receivingOrder: url + order + "putOrderStatus/receivingOrder", //收货
 
     // 退货退款
     addRefunds: url + refunds + "addRefunds", //生成记录

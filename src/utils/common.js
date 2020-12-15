@@ -169,7 +169,7 @@ export function orderStatusText(orderStatus) {
             text = "已支付";
             break;
         case 2:
-            text = "交易完成";
+            text = "已收货";
             break;
         case 3:
             text = "已取消";
@@ -185,6 +185,9 @@ export function orderStatusText(orderStatus) {
             break;
         case 7:
             text = "已退货退款";
+            break;
+        case 8:
+            text = "已完成";
             break;
     }
     return text;
