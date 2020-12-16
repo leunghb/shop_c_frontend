@@ -64,7 +64,7 @@
         <div class="evaluate">
             <div class="label">评价</div>
             <van-icon name="arrow"/>
-            <div class="value" v-if="evaluateCount>0" v-text="'+ '+evaluateCount"></div>
+            <div class="value" v-text="evaluateCount>0?'+ '+evaluateCount:'无评价'" @click="toGoodsEvaluate"></div>
         </div>
         <div class="detail"></div>
 
@@ -549,6 +549,14 @@
                         this.$toast(err.message);
                     });
             },
+            toGoodsEvaluate() {
+                this.$router.push({
+                    path: "/GoodsEvaluate",
+                    query: {
+                        goodsId: this.goodsId
+                    }
+                })
+            }
         },
         computed: {
             hasSelect() {

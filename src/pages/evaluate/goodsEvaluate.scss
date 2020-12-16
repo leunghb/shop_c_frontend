@@ -1,0 +1,50 @@
+.goodsEvaluate {
+    .back {
+        background-color: #fff;
+        z-index: 999;
+    }
+    .tabs {
+        position: fixed;
+        top: 45px;
+        width: 100%;
+    }
+    .list {
+        position: absolute;
+        margin-top: 110px;
+        width: 100%;
+        .item {
+            display: inline-block;
+            position: relative;
+            margin-left: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            width: calc(100% - 30px);
+            background-color: #faf9f9;
+            border-radius: 10px;
+            box-sizing: border-box;
+            .avatar {
+                float: left;
+                height: 50px;
+                width: 50px;
+                border-radius: 5px;
+            }
+            .name {
+                margin-left: 60px;
+                font-size: 12px;
+                line-height: 18px;
+            }
+            .rate {
+                margin-top: 18px;
+                margin-left: 10px;
+            }
+            .comment {
+                margin-top: 10px;
+                font-size: 14px;
+                line-height: 20px;
+            }
+        }
+    }
+    >>>.van-tabs__line {
+        background-color: #3391c9;
+    }
+}

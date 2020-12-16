@@ -141,6 +141,13 @@ export default new Router({
             meta: {
                 keepAlive: false,
             }
+        }, {
+            path: '/GoodsEvaluate',
+            name: 'GoodsEvaluate',
+            component: () => import('@/pages/evaluate/goodsEvaluate'),
+            meta: {
+                keepAlive: false,
+            }
         }
     ]
 })

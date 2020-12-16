@@ -54,6 +54,7 @@ export const api = {
     getGoodsDetail: url + goods + "getGoodsDetail", //商品详情
     addOrDelCollectGoods: url + goods + "addOrDelCollectGoods", //添加收藏或删除商品
     hasCollectGoods: url + goods + "hasCollectGoods", //商品是否收藏
+    getGoodsEvaluateList: url + goods + "getGoodsEvaluateList", //获取商品的评论
 
     // 购物车
     addGoodsToCart: url + cart + "addGoodsToCart", //添加商品到购物车
@@ -70,7 +71,6 @@ export const api = {
     receivingOrder: url + order + "putOrderStatus/receivingOrder", //收货
     addEvaluate: url + order + "addEvaluate", //添加评价
     selEvaluate: url + order + "getEvaluate", //获取订单商品的评论
-    selGoodsEvaluateList: url + order + "getGoodsEvaluateList", //获取商品的评论
 
     // 退货退款
     addRefunds: url + refunds + "addRefunds", //生成记录
