@@ -47,11 +47,6 @@
                 <div class="label">收藏</div>
                 <van-icon name="arrow"/>
             </div>
-            <div class="item" @click="toPage('Comment')">
-                <i class="iconfont iconpingjiaguanli"></i>
-                <div class="label">评论</div>
-                <van-icon name="arrow"/>
-            </div>
         </div>
     </div>
 </template>
