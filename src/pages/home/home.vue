@@ -142,6 +142,7 @@
                 allClassify: [],
                 activeClassifyId: null,
                 //列表
+                classifyGoodsloading: false,
                 list: [],
                 page: 0,
                 limit: 10,
@@ -240,7 +241,9 @@
                                 this.finished = true;
                             }
                             this.loading = false;
+                            this.classifyGoodsloading = false;
                         }
+                        this.classifyGoodsloading = false;
                     })
                     .catch((err) => {
                         this.$toast(err.message);
@@ -254,6 +257,8 @@
             },
             // 切换商品分类
             chooseClassify(id) {
+                if (this.classifyGoodsloading) return false;
+                this.classifyGoodsloading = true;
                 if (this.currentClassifyId == id) return false;
                 if (id == -1) {
                     this.showAllClassify = true;
