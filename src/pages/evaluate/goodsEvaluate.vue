@@ -39,6 +39,7 @@
         },
         methods: {
             getGoodsEvaluateList() {
+                this.list = [];
                 let params = this.$qs.stringify({
                     goodsId: this.$route.query.goodsId,
                     type: this.active == 0 ? null : this.active
@@ -54,7 +55,7 @@
                         this.list = list;
                         return false;
                     }
-                    this.$toast(data.message)
+                    this.$toast("暂无评论");
                 }).catch(err => {
                     this.$toast(err.message)
                 })

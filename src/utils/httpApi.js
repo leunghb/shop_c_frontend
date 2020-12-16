@@ -46,6 +46,7 @@ export const api = {
     addOrPutAddress: url + user + "addOrPutAddress", //添加或更新用户地址
     delAddress: url + user + "delAddress", //删除地址
     putUserAvatarOrName: url + user + "putUserAvatarOrName", //更新用户头像
+    getUserGoodsCollectList: url + user + "getUserGoodsCollectList", //商品收藏列表
 
     // 商品
     getGoodsType: url + goods + "getGoodsType", //商品分类

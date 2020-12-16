@@ -148,6 +148,13 @@ export default new Router({
             meta: {
                 keepAlive: false,
             }
+        }, {
+            path: '/Collect',
+            name: 'Collect',
+            component: () => import('@/pages/collect/collect'),
+            meta: {
+                keepAlive: false,
+            }
         }
     ]
 })
