@@ -28,7 +28,7 @@
                     class="mainTitle multipleLinesOmitted"
                     v-text="mainTitle"
             ></div>
-            <div class="subTitle" v-text="subTitle">纯天然产品</div>
+            <div class="subTitle" v-text="subTitle"></div>
             <div class="priceAndsalesVolume">
                 <div class="noDiscount" v-if="discountPrice == 0">
                     <span>￥</span>{{ originalPrice }}
@@ -268,7 +268,11 @@
                             goodsInfo.discountPrice > 0
                                 ? goodsInfo.discountPrice
                                 : goodsInfo.originalPrice;
-                        let sku = JSON.parse(goodsInfo.specList);
+                        let sku = goodsInfo.specList != undefined ? JSON.parse(goodsInfo.specList) : "";
+                        if (goodsInfo.specList == undefined) {
+                            this.skuPrice = this.price;
+                            this.skuStock = this.totalStock;
+                        }
                         for (let i in sku) {
                             let attrKeyIndexOf = i.indexOf(",");
                             let attrKeyObj = {};
