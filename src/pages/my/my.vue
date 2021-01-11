@@ -19,6 +19,7 @@
                     v-text="name != '' ? name : account"
                     @click="showChangeNamePopup = true"
             ></div>
+            <van-icon name="close" class="logout" @click="logout()"/>
             <van-popup class="changeNamePopup" v-model="showChangeNamePopup">
                 <input
                         type="text"
@@ -135,6 +136,12 @@
                     path: "/" + page,
                 });
             },
+            logout() {
+                localStorage.clear();
+                this.$router.replace({
+                    path: "/Login"
+                })
+            }
         },
     };
 </script>
