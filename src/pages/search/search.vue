@@ -99,13 +99,13 @@ export default {
             post(api.getGoodsList, params)
                 .then((res) => {
                     let data = res.data;
-                    if (data.data.length == 0) {
+                    if (data.data.list.length == 0) {
                         this.finishedText = "换个商品吧 _(:з」∠)_";
                         this.finished = true;
                         return false;
                     }
                     if (data.code == 0) {
-                        data.data.forEach((v) => {
+                        data.data.list.forEach((v) => {
                             v.cover = api.baseUrl + v.cover.split(",")[0];
                             this.list.push(v);
                         });

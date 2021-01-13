@@ -230,7 +230,7 @@
                     .then((res) => {
                         let data = res.data;
                         if (data.code == 0) {
-                            data.data.forEach((v) => {
+                            data.data.list.forEach((v) => {
                                 v.cover = api.baseUrl + v.cover.split(",")[0];
                                 this.list.push(v);
                             });
