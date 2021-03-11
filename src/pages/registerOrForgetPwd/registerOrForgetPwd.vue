@@ -12,7 +12,7 @@
         <input
             class="account"
             type="text"
-            placeholder="邮箱"
+            placeholder="QQ邮箱"
             v-model="account"
             onkeyup="this.value=this.value.replace(/^\s+|\s+$/g,'')"
         />
@@ -74,11 +74,15 @@ export default {
         getCode() {
             const ACCOUNT = this.account;
             if (ACCOUNT.length == 0) {
-                this.$toast("请输入邮箱");
+                this.$toast("请输入QQ邮箱");
                 return false;
             }
             if (!isEmail(ACCOUNT)) {
                 this.$toast("邮箱格式错误");
+                return false;
+            }
+            if (ACCOUNT.indexOf("@qq.com") == -1) {
+                this.$toast("请输入正确的QQ邮箱");
                 return false;
             }
             if (!this.canGetCode) return false;
@@ -139,11 +143,15 @@ export default {
                 PASSWORD = this.password,
                 REPEATPASSWORD = this.repeatPassword;
             if (ACCOUNT.length == 0) {
-                this.$toast("请输入邮箱");
+                this.$toast("请输入QQ邮箱");
                 return false;
             }
             if (!isEmail(ACCOUNT)) {
                 this.$toast("邮箱格式错误");
+                return false;
+            }
+            if (ACCOUNT.indexOf("@qq.com") == -1) {
+                this.$toast("请输入正确的QQ邮箱");
                 return false;
             }
             if (CODE.length == 0) {
