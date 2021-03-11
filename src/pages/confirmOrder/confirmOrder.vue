@@ -80,7 +80,6 @@ export default {
         onSubmit() {
             let list = this.list;
             list.forEach((v) => {
-                console.log(v);
                 v.skuCover = v.skuCover != null ? v.skuCover.replace(api.baseUrl, "") : v.cover.replace(api.baseUrl, "");
                 v.cover = v.skuCover;
             });

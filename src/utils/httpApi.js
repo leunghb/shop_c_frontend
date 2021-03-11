@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {getCookie} from "../utils/common"
+import { getCookie } from "../utils/common"
 
 axios.defaults.withCredentials = true; //让ajax携带cookie
 axios.defaults.timeout = 30000;
@@ -28,9 +28,9 @@ if (ENV == "development") {
 if (ENV == "production") {
     url = process.env.PROD_API_URL;
 }
-let user = "/user/", goods = "/goods/", cart = "/cart/", order = "/order/", upload = "/upload/", refunds = "/refunds/";
+let user = "/user/", goods = "/goods/", cart = "/cart/", order = "/order/", upload = "/upload/", refunds = "/refunds/", releaseFileUploadUrl = "http://lhbpi.free.idcfengye.com/file_upload";
 export const api = {
-    baseUrl: url,
+    baseUrl: ENV == "production" ? releaseFileUploadUrl : url,
     // 用户
     getAllUser: url + user + "getAllUser", //所有用户
     getUserByAccount: url + user + "getUserByAccount", //通过账号获取用户
