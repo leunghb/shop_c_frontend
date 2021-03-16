@@ -80,7 +80,10 @@ export default {
         onSubmit() {
             let list = this.list;
             list.forEach((v) => {
-                v.skuCover = v.skuCover != null ? v.skuCover.replace(api.baseUrl, "") : v.cover.replace(api.baseUrl, "");
+                v.skuCover =
+                    v.skuCover != null
+                        ? v.skuCover.replace(api.baseUrl, "")
+                        : v.cover.replace(api.baseUrl, "");
                 v.cover = v.skuCover;
             });
             let params = this.$qs.stringify({
@@ -89,19 +92,28 @@ export default {
                 info: JSON.stringify(list),
                 type: this.$route.query.type,
             });
+            this.$toast.loading({
+                message: "提交订单中...",
+                duration: 0,
+            });
             post(api.addOrder, params)
                 .then((res) => {
                     let data = res.data;
                     if (data.code == 0) {
+                        this.$toast.clear();
                         this.$router.push({
                             path: "/Pay",
                             query: {
                                 orderId: data.data.orderId,
                             },
                         });
+                        return false;
                     }
+                    this.$toast.clear();
+                    this.$toast(data.message);
                 })
                 .catch((err) => {
+                    this.$toast.clear();
                     this.$toast(err.message);
                 });
         },

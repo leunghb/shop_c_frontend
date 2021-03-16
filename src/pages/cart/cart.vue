@@ -196,17 +196,24 @@ export default {
                     let params = this.$qs.stringify({
                         cartId: item.cartId,
                     });
+                    this.$toast.loading({
+                        message: "删除订单中...",
+                        duration: 0,
+                    });
                     post(api.delCartOneGoods, params)
                         .then((res) => {
                             let data = res.data;
                             if (data.code == 0) {
+                                this.$toast.clear();
                                 this.list.splice(index, 1);
                                 this.$toast("删除成功");
                                 return false;
                             }
+                            this.$toast.clear();
                             this.$toast(data.message);
                         })
                         .catch((err) => {
+                            this.$toast.clear();
                             this.$toast(err.message);
                         });
                 })

@@ -93,16 +93,23 @@ export default {
             let params = new FormData();
             params.append("file", files);
             params.append("fileType", 0);
+            this.$toast.loading({
+                message: "上传中...",
+                duration: 0,
+            });
             post(api.uploadSinglePicture, params)
                 .then((res) => {
                     let data = res.data;
                     if (data.code == 0) {
+                        this.$toast.clear();
                         this.putUserAvatarOrName(data.data, this.name);
                         return false;
                     }
+                    this.$toast.clear();
                     this.$toast("头像上传失败");
                 })
                 .catch((err) => {
+                    this.$toast.clear();
                     this.$toast(err.messgae);
                 });
         },
@@ -114,19 +121,26 @@ export default {
                 avatar: avatar,
                 name: name,
             });
+            this.$toast.loading({
+                message: "更新中...",
+                duration: 0,
+            });
             post(api.putUserAvatarOrName, params)
                 .then((res) => {
                     let data = res.data;
                     if (data.code == 0) {
+                        this.$toast.clear();
                         this.$toast("更新成功");
                         this.avatar = api.baseUrl + avatar;
                         this.name = name;
                         this.showChangeNamePopup = false;
                         return false;
                     }
+                    this.$toast.clear();
                     this.$toast("更新失败");
                 })
                 .catch((err) => {
+                    this.$toast.clear();
                     this.$toast(err.messgae);
                 });
         },

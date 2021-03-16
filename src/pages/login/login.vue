@@ -64,14 +64,18 @@ export default {
                 account: ACCOUNT,
                 password: PASSWORD,
             });
+            this.$toast.loading({
+                message: "登录中...",
+                duration: 0,
+            });
             post(api.login, params)
                 .then((res) => {
                     let data = res.data;
                     if (data.code == 0) {
-                        this.$toast({ message: "正在登录...", duration: 1400 });
                         let timer = setTimeout(() => {
                             document.cookie = "SHOPSESSIONID=" + data.data;
                             document.cookie = "account=" + ACCOUNT;
+                            this.$toast.clear();
                             this.$router.push({
                                 path: "/",
                             });
@@ -79,9 +83,11 @@ export default {
                         }, 1500);
                         return false;
                     }
+                    this.$toast.clear();
                     this.$toast(data.message);
                 })
                 .catch((err) => {
+                    this.$toast.clear();
                     this.$toast(err.message);
                 });
         },
