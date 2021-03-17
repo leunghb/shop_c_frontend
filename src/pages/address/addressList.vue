@@ -36,6 +36,8 @@ export default {
             get(api.getAddressList)
                 .then((res) => {
                     let data = res.data.data;
+                    if (data.length == 0)
+                        localStorage.removeItem("temporaryAddress");
                     data.forEach((v) => {
                         v.isDefault = v.isDefault == 1 ? true : false;
                     });

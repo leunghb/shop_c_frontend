@@ -58,7 +58,9 @@
             <div
                 class="value"
                 @click="toAddressList()"
-                v-text="address.name + '—' + address.address"
+                v-text="
+                    address ? address.name + '—' + address.address : '暂无地址'
+                "
             ></div>
         </div>
         <div class="evaluate">
