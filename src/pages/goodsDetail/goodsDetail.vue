@@ -503,6 +503,10 @@ export default {
                 this.$toast("暂无库存");
                 return false;
             }
+            if (!this.address) {
+                this.$toast("请添加地址");
+                return false;
+            }
             let list = [];
             let obj = {
                 goodsId: this.goodsId,
