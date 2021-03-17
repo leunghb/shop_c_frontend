@@ -89,7 +89,7 @@
             }
         }
     }
-    .specifications,.address,.evaluate {
+    .specifications,.address,.evaluate,.detail {
         padding: .4rem;
         width: 100%;
         clear: both;
@@ -112,9 +112,12 @@
         }
     }
     .detail {
-        padding: 30px 15px 80px;
+        padding: 15px 15px 80px;
         width: 100%;
         box-sizing: border-box;
+        >>>img {
+            border-radius: 5px;
+        }
     }
     .footer {
         position: fixed;

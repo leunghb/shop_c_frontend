@@ -58,9 +58,11 @@
             <div
                 class="value"
                 @click="toAddressList()"
+                v-show="address"
                 v-text="
                     address ? address.name + '—' + address.address : '暂无地址'
                 "
+                v-cloak
             ></div>
         </div>
         <div class="evaluate">
@@ -72,7 +74,10 @@
                 @click="toGoodsEvaluate"
             ></div>
         </div>
-        <div class="detail"></div>
+        <div class="detail" v-if="detail">
+            <div class="label">详情</div>
+            <div v-html="detail"></div>
+        </div>
 
         <van-overlay class="sku" :show="showSku" @click="showSku = false">
             <div class="wrapper" @click.stop>
@@ -270,6 +275,10 @@ export default {
                     this.salesVolume = goodsInfo.salesVolume;
                     this.totalStock = goodsInfo.stock;
                     this.maxNumberOfpurchases = goodsInfo.stock;
+                    this.detail = goodsInfo.content.replace(
+                        'src="/static',
+                        'src="' + api.baseUrl + "/static"
+                    );
                     this.price =
                         goodsInfo.discountPrice > 0
                             ? goodsInfo.discountPrice
