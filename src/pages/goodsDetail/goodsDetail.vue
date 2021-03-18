@@ -471,7 +471,9 @@ export default {
                 this.$toast("暂无库存");
                 return false;
             }
-            let skuCover = this.skuCover.replace(api.baseUrl, "");
+            let skuCover = this.skuCover
+                ? this.skuCover.replace(api.baseUrl, "")
+                : null;
             let currentSkuInfo = this.currentSkuInfo;
             let params = this.$qs.stringify({
                 goodsSpecsId: currentSkuInfo.id,
