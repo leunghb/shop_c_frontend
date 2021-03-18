@@ -105,9 +105,7 @@ export default {
                         let arr = [];
                         data.data.forEach((v) => {
                             v.checked = v.stock == 0 ? null : false;
-                            v.cover =
-                                v.skuCover != "" ? v.skuCover : v.cover[0];
-                            v.cover = api.baseUrl + v.cover;
+                            v.cover = api.baseUrl + v.cover.split(",")[0];
                             arr.push(v);
                             this.listCheckedStatus.push(
                                 v.stock == 0 ? null : false

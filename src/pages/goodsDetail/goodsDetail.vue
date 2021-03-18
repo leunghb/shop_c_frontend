@@ -58,7 +58,6 @@
             <div
                 class="value"
                 @click="toAddressList()"
-                v-show="address"
                 v-text="
                     address ? address.name + '—' + address.address : '暂无地址'
                 "
@@ -224,6 +223,7 @@ export default {
             skuStock: 0, //规格单品库存
             skuPrice: 0,
             skuCover: null,
+            detail: null,
 
             numberOfpurchases: 1, //购买数量,
             minNumberOfpurchases: 1,
