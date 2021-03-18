@@ -115,7 +115,8 @@
         padding: 15px 15px 80px;
         width: 100%;
         box-sizing: border-box;
-        >>>img {
+        .content >>> img {
+            width: 100%;
             border-radius: 5px;
         }
     }

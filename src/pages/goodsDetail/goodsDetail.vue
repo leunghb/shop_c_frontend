@@ -74,9 +74,9 @@
                 @click="toGoodsEvaluate"
             ></div>
         </div>
-        <div class="detail" v-if="detail">
-            <div class="label">详情</div>
-            <div v-html="detail"></div>
+        <div class="detail">
+            <div class="label" v-if="detail">详情</div>
+            <div class="content" v-html="detail"></div>
         </div>
 
         <van-overlay class="sku" :show="showSku" @click="showSku = false">
