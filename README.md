@@ -11,17 +11,4 @@
     6.订单完成前可申请退货、退货退款，后续确认操作由后台提供；
     7.提供金额消费、返还、充值记录显示；
 
-<img src=./src/assets/md/微信图片_20210319220905.jpg width=20% title=登录页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220901.jpg width=20% title=首页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220857.jpg width=20% title=首页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220909.jpg width=20% title=首页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220912.jpg width=20% title=商品详情页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220915.jpg width=20% title=商品详情页选择规格 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220918.jpg width=20% title=确认订单页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220930.jpg width=20% title=支付页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220935.jpg width=20% title=商品收藏页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220927.jpg width=20% title=购物车 display=inline/>
-<img src=./src/assets/md/微信图片_202103192208341.jpg width=20% title=订单列表页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220834.jpg width=20% title=订单详情页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220850.jpg width=20% title=商品评价列表页 display=inline/>
-<img src=./src/assets/md/微信图片_20210319220924.jpg width=20% title=余额使用记录 display=inline/>
+<img src=./src/assets/md/微信图片_20210319220905.jpg width=20% title=登录页 /><img src=./src/assets/md/微信图片_20210319220901.jpg width=20% title=首页 /><img src=./src/assets/md/微信图片_20210319220857.jpg width=20% title=首页 /><img src=./src/assets/md/微信图片_20210319220909.jpg width=20% title=首页 /><img src=./src/assets/md/微信图片_20210319220912.jpg width=20% title=商品详情页 /><img src=./src/assets/md/微信图片_20210319220915.jpg width=20% title=商品详情页选择规格 /><img src=./src/assets/md/微信图片_20210319220918.jpg width=20% title=确认订单页 /><img src=./src/assets/md/微信图片_20210319220930.jpg width=20% title=支付页 /><img src=./src/assets/md/微信图片_20210319220935.jpg width=20% title=商品收藏页 /><img src=./src/assets/md/微信图片_20210319220927.jpg width=20% title=购物车 /><img src=./src/assets/md/微信图片_202103192208341.jpg width=20% title=订单列表页 /><img src=./src/assets/md/微信图片_20210319220834.jpg width=20% title=订单详情页 /><img src=./src/assets/md/微信图片_20210319220850.jpg width=20% title=商品评价列表页 /><img src=./src/assets/md/微信图片_20210319220924.jpg width=20% title=余额使用记录 />
