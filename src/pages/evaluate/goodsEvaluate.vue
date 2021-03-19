@@ -43,6 +43,7 @@ export default {
         return {
             active: 0,
             list: [],
+            defaultAvatar: require("../../assets/default-avatar.png"),
         };
     },
     created() {
@@ -61,7 +62,10 @@ export default {
                     if (data.code == 0) {
                         let list = [];
                         data.data.forEach((v) => {
-                            v.avatar = api.baseUrl + v.avatar;
+                            v.avatar = undefined;
+                            v.avatar = v.avatar
+                                ? api.baseUrl + v.avatar
+                                : this.defaultAvatar;
                             list.push(v);
                         });
                         this.list = list;
