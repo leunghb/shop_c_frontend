@@ -16,12 +16,12 @@ export default {
     created() {
         const ENV = process.env.NODE_ENV;
         if (ENV == "production" && platformLimit()) {
-            // this.$router.push({
-            //     path: "/Error",
-            //     query: {
-            //         errorTitle: "请在手机打开",
-            //     },
-            // });
+            this.$router.push({
+                path: "/Error",
+                query: {
+                    errorTitle: "请在手机打开",
+                },
+            });
         }
 
         get(api.getUserInfo)
